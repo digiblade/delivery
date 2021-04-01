@@ -1,4 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'package:delivery/Components/Button.dart';
+import 'package:delivery/Components/InputField.dart';
 import 'package:flutter/material.dart';
 import 'HomePage.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,14 +30,11 @@ class _RegisterPageState extends State<RegisterPage> {
       resizeToAvoidBottomInset: true,
       body: Container(
         decoration: new BoxDecoration(
-          gradient: new LinearGradient(
-            colors: [
-              const Color(0xFFFC5C00),
-              const Color(0xFF7E2E00),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+          image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.5), BlendMode.srcOver),
+              fit: BoxFit.cover,
+              image: Image.asset("assets/background.jpg").image),
         ),
         child: Center(
           child: Padding(
@@ -51,89 +50,35 @@ class _RegisterPageState extends State<RegisterPage> {
                   Text(
                     "Register",
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 32,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: TextField(
+                    child: InputField(
+                      hint: "Useremail",
+                      borderColor: Colors.white.withOpacity(0.5),
                       controller: userCtrl,
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.emailAddress,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: "Username",
-                        fillColor: Colors.white,
-                        hintStyle: TextStyle(color: Colors.white),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: Colors.white,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: Colors.white,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: Colors.white,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                      ),
+                      fillColor: Colors.white.withOpacity(0.5),
+                      hintColor: Colors.white,
+                      isFilled: true,
+                      isPassword: false,
+                      textColor: Colors.white,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: TextField(
-                      controller: passCtrl,
-                      obscureText: obscure,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: "Password",
-                        hintStyle: TextStyle(color: Colors.white),
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: Colors.white,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: Colors.white,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: Colors.white,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                      ),
+                    child: InputField(
+                      hint: "Password",
+                      borderColor: Colors.white.withOpacity(0.5),
+                      controller: userCtrl,
+                      fillColor: Colors.white.withOpacity(0.5),
+                      hintColor: Colors.white,
+                      isFilled: true,
+                      isPassword: obscure,
+                      textColor: Colors.white,
                     ),
                   ),
                   TextButton(
@@ -158,37 +103,20 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                   ),
-                  Container(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      // color: Color(0xff040707),
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                        Color(0xff040707),
-                      )),
-                      onPressed: () async {
-                        // final newUser =
-                        //     await auth.createUserWithEmailAndPassword(
-                        //         email: userCtrl.text, password: passCtrl.text);
-                        // print(newUser.additionalUserInfo!.profile);
-                        // if (newUser.additionalUserInfo!.profile != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => HomePage(),
-                          ),
-                        );
-                        // }
-                        // int data = await checkUser(userCtrl.text);
-                        // if (data == 0) {
-                        //   addUser(userCtrl.text, passCtrl.text);
-                        // }
-                      },
-                      child: Text(
-                        "Register",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
+                  Button(
+                    // color: Color(0xff040707),
+                    color: Colors.white,
+                    height: 60,
+                    text: "Register",
+                    textColor: Colors.black,
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => HomePage(),
+                        ),
+                      );
+                    },
                   ),
                   Center(
                     child: Row(

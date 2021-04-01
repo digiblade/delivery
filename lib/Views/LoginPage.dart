@@ -27,20 +27,12 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: true,
       body: Container(
         decoration: new BoxDecoration(
-          gradient: new LinearGradient(
-            colors: [
-              const Color(0xFFFC5C00),
-              const Color(0xFF7E2E00),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-
-            // begin: const FractionalOffset(0.0, 0.0),
-            // end: const FractionalOffset(1.0, 0.0),
-            // stops: [0.0, 1.0],
-            // tileMode: TileMode.clamp,
-          ),
-        ),
+            image: DecorationImage(
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.5), BlendMode.srcOver),
+                fit: BoxFit.cover,
+                image: Image.asset("assets/background.jpg").image),
+            color: Colors.black.withOpacity(0.5)),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -55,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                   Text(
                     "Login ",
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 28,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
@@ -110,8 +102,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Button(
                     text: "Login",
-                    textColor: Colors.white,
+                    textColor: Colors.black,
+                    color: Colors.white,
+                    height: 60,
                     onPressed: () {
+                      print("demp");
                       Navigator.push(
                         context,
                         MaterialPageRoute(
