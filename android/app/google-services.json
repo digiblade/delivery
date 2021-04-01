@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "184363687511",
+    "project_id": "delivery-309005",
+    "storage_bucket": "delivery-309005.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184363687511:android:3ffb33a0b6d11fdedccd12",
+        "android_client_info": {
+          "package_name": "in.digiblade.delivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184363687511-4779i20vqphkgh3fb4h4dbk9lmmfmoq3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnUyeeubGVMKLPGLkSOUmSLsOqTIrQWQ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "184363687511-4779i20vqphkgh3fb4h4dbk9lmmfmoq3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
