@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'NavigationDrawer.dart';
 import 'locationmap.dart';
 
 class UserData extends StatefulWidget {
@@ -14,30 +15,39 @@ class _UserDataState extends State<UserData> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: StreamBuilder(
-        stream: firestore.collection("user").snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> ass) {
-          if (ass.hasError) {
-            return Text('Something went wrong');
-          }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("UserPage"),
+        backgroundColor: Color(0xFF7E2E00),
+      ),
+      endDrawer: Drawer(
+        child: NavigatorDrawer(),
+      ),
+      body: SingleChildScrollView(
+        child: StreamBuilder(
+          stream: firestore.collection("user").snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> ass) {
+            if (ass.hasError) {
+              return Text('Something went wrong');
+            }
 
-          if (ass.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          return Column(
-            children: ass.data.docs.map<Widget>((e) {
-              return UserCard(
-                name: e.data()['name'],
-                subTitle: e.data()['subtitle'],
-                email: e.data()['email'],
+            if (ass.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
               );
-            }).toList(),
-          );
-        },
+            }
+
+            return Column(
+              children: ass.data.docs.map<Widget>((e) {
+                return UserCard(
+                  name: e.data()['name'],
+                  subTitle: e.data()['subtitle'],
+                  email: e.data()['email'],
+                );
+              }).toList(),
+            );
+          },
+        ),
       ),
     );
   }

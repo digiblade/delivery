@@ -1,35 +1,41 @@
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({Key? key}) : super(key: key);
+  final String? name;
+  final ImageProvider? bgImage;
+  final Color? bgColor;
+  final VoidCallback onPressed;
+
+  const ProductCard({
+    Key? key,
+    this.name,
+    this.bgImage,
+    required this.onPressed,
+    this.bgColor = Colors.white,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(color: Colors.black),
-          BoxShadow(color: Colors.black),
-          BoxShadow(color: Colors.black),
-        ],
-        borderRadius: BorderRadius.circular(16),
-        image: DecorationImage(
-          image: Image.asset("assets/background.jpg").image,
-          fit: BoxFit.cover,
-        ),
-      ),
+    return GestureDetector(
+      onTap: onPressed,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Colors.black.withOpacity(0.5),
+          color: bgColor,
         ),
-        child: Center(
-          child: Text(
-            "CheckUser",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: Colors.black.withOpacity(0.5),
+          ),
+          child: Center(
+            child: Text(
+              name!,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

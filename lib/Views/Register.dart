@@ -2,7 +2,7 @@
 import 'package:delivery/Components/Button.dart';
 import 'package:delivery/Components/InputField.dart';
 import 'package:flutter/material.dart';
-import 'HomePage.dart';
+import 'Company/HomePage.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'LoginPage.dart';
 
