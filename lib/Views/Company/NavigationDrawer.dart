@@ -1,6 +1,5 @@
+import 'package:delivery/Views/Company/Product/EditProduct.dart';
 import 'package:flutter/material.dart';
-
-import 'UserPage.dart';
 
 class NavigatorDrawer extends StatelessWidget {
   final BuildContext? newContext;
@@ -101,7 +100,7 @@ class NavigatorDrawer extends StatelessWidget {
                     Navigator.push(
                       newContext!,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => UserData(),
+                        builder: (BuildContext context) => EditProduct(),
                       ),
                     );
                   },

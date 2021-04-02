@@ -1,3 +1,4 @@
+import 'package:delivery/Components/Color.dart';
 import 'package:delivery/Components/ProductCard.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Dashboard"),
-        backgroundColor: Color(0xFF7E2E00),
+        backgroundColor: secondary,
       ),
       endDrawer: Drawer(
         child: NavigatorDrawer(
