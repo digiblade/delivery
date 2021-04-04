@@ -1,4 +1,4 @@
-import 'package:delivery/Views/Company/Product/EditProduct.dart';
+import 'package:delivery/Views/Company/Product/ManageProduct.dart';
 import 'package:flutter/material.dart';
 
 class NavigatorDrawer extends StatelessWidget {
