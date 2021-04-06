@@ -3,14 +3,14 @@ import 'package:delivery/Components/Color.dart';
 import 'package:delivery/Components/InputField.dart';
 import 'package:flutter/material.dart';
 
-class AddProduct extends StatefulWidget {
-  AddProduct({Key? key}) : super(key: key);
+class AddUsers extends StatefulWidget {
+  AddUsers({Key? key}) : super(key: key);
 
   @override
-  _AddProductState createState() => _AddProductState();
+  _AddUsersState createState() => _AddUsersState();
 }
 
-class _AddProductState extends State<AddProduct> {
+class _AddUsersState extends State<AddUsers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

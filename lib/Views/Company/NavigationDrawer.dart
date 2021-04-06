@@ -1,6 +1,9 @@
 import 'package:delivery/Views/Company/Product/ManageProduct.dart';
 import 'package:flutter/material.dart';
 
+import 'Order/ManageOrder.dart';
+import 'User/ManageUser.dart';
+
 class NavigatorDrawer extends StatelessWidget {
   final BuildContext? newContext;
   const NavigatorDrawer({
@@ -141,38 +144,60 @@ class NavigatorDrawer extends StatelessWidget {
                 Divider(
                   color: Colors.black,
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.supervised_user_circle,
-                    size: 32,
-                  ),
-                  title: Text(
-                    "Manage User",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      newContext!,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ManageUsers(),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.supervised_user_circle,
+                      size: 32,
                     ),
-                  ),
-                  subtitle: Text(
-                    "Manage All Users",
+                    title: Text(
+                      "Manage User",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                    subtitle: Text(
+                      "Manage All Users",
+                    ),
                   ),
                 ),
                 Divider(
                   color: Colors.black,
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.supervised_user_circle,
-                    size: 32,
-                  ),
-                  title: Text(
-                    "Manage Orders",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      newContext!,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ManageOrders(),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.supervised_user_circle,
+                      size: 32,
                     ),
+                    title: Text(
+                      "Manage Orders",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                    subtitle: Text("Manage All Orders"),
                   ),
-                  subtitle: Text("Manage All Orders"),
                 ),
                 Divider(
                   color: Colors.black,

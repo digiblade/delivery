@@ -3,14 +3,14 @@ import 'package:delivery/Components/Color.dart';
 import 'package:delivery/Components/InputField.dart';
 import 'package:flutter/material.dart';
 
-class EditProduct extends StatefulWidget {
-  EditProduct({Key? key}) : super(key: key);
+class EditUsers extends StatefulWidget {
+  EditUsers({Key? key}) : super(key: key);
 
   @override
-  _EditProductState createState() => _EditProductState();
+  _EditUsersState createState() => _EditUsersState();
 }
 
-class _EditProductState extends State<EditProduct> {
+class _EditUsersState extends State<EditUsers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -2,22 +2,20 @@ import 'package:delivery/Components/Color.dart';
 import 'package:flutter/material.dart';
 
 import '../NavigationDrawer.dart';
-import 'AddUser.dart';
-import 'EditUser.dart';
 
-class ManageUsers extends StatefulWidget {
-  ManageUsers({Key? key}) : super(key: key);
+class ManageOrders extends StatefulWidget {
+  ManageOrders({Key? key}) : super(key: key);
 
   @override
-  _ManageUsersState createState() => _ManageUsersState();
+  _ManageOrdersState createState() => _ManageOrdersState();
 }
 
-class _ManageUsersState extends State<ManageUsers> {
+class _ManageOrdersState extends State<ManageOrders> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Users"),
+        title: Text("Products"),
         backgroundColor: secondary,
       ),
       endDrawer: Drawer(
@@ -26,16 +24,9 @@ class _ManageUsersState extends State<ManageUsers> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => AddUsers(),
-            ),
-          );
-        },
+        onPressed: () {},
         backgroundColor: primary,
-        child: Icon(Icons.add),
+        child: Icon(Icons.search),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -44,7 +35,7 @@ class _ManageUsersState extends State<ManageUsers> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Users",
+                "Orders",
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -62,27 +53,32 @@ class _ManageUsersState extends State<ManageUsers> {
                       ),
                       DataColumn(
                         label: Expanded(
-                          child: Text("User Name"),
+                          child: Text("Orders ID"),
                         ),
                       ),
                       DataColumn(
                         label: Expanded(
-                          child: Text("User Type"),
+                          child: Text("SS Name"),
                         ),
                       ),
                       DataColumn(
                         label: Expanded(
-                          child: Text("City"),
+                          child: Text("Address"),
                         ),
                       ),
                       DataColumn(
                         label: Expanded(
-                          child: Text("State"),
+                          child: Text("Quantity"),
                         ),
                       ),
                       DataColumn(
                         label: Expanded(
                           child: Text("Status"),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Expanded(
+                          child: Text("Generate Bill"),
                         ),
                       ),
                       DataColumn(
@@ -98,44 +94,49 @@ class _ManageUsersState extends State<ManageUsers> {
                             Text("1"),
                           ),
                           DataCell(
+                            Text("#ORD123456789"),
+                          ),
+                          DataCell(
                             Text("Akash"),
                           ),
                           DataCell(
-                            Text("Distributor"),
+                            Text("5"),
                           ),
                           DataCell(
-                            Text("Bilaspur"),
-                          ),
-                          DataCell(
-                            Text("Chhattissgarh"),
+                            Text("Delivered"),
                           ),
                           DataCell(
                             Text("Active"),
                           ),
-                          DataCell(Row(
-                            children: [
-                              IconButton(
+                          DataCell(
+                            IconButton(
+                              icon: Icon(
+                                Icons.print,
+                                color: success,
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                          DataCell(
+                            Row(
+                              children: [
+                                IconButton(
                                   icon: Icon(
                                     Icons.edit,
                                     color: success,
                                   ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            EditUsers(),
-                                      ),
-                                    );
-                                  }),
-                              IconButton(
+                                  onPressed: () {},
+                                ),
+                                IconButton(
                                   icon: Icon(
                                     Icons.delete,
                                     color: danger,
                                   ),
-                                  onPressed: () {}),
-                            ],
-                          )),
+                                  onPressed: () {},
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ],
