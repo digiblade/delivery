@@ -2,8 +2,8 @@ import 'package:delivery/Components/Color.dart';
 import 'package:flutter/material.dart';
 
 import '../NavigationDrawer.dart';
-import 'AddProduct.dart';
-import 'EditProduct.dart';
+import 'AddUser.dart';
+import 'EditUser.dart';
 
 class ManageProduct extends StatefulWidget {
   ManageProduct({Key? key}) : super(key: key);
@@ -44,7 +44,7 @@ class _ManageProductState extends State<ManageProduct> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Products",
+                "Users",
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -62,37 +62,27 @@ class _ManageProductState extends State<ManageProduct> {
                       ),
                       DataColumn(
                         label: Expanded(
-                          child: Text("Product Name"),
+                          child: Text("User Name"),
                         ),
                       ),
                       DataColumn(
                         label: Expanded(
-                          child: Text("Product Code"),
+                          child: Text("User Type"),
                         ),
                       ),
                       DataColumn(
                         label: Expanded(
-                          child: Text("HSN Code"),
+                          child: Text("City"),
                         ),
                       ),
                       DataColumn(
                         label: Expanded(
-                          child: Text("Product Price"),
+                          child: Text("State"),
                         ),
                       ),
                       DataColumn(
                         label: Expanded(
-                          child: Text("Product Details"),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Expanded(
-                          child: Text("Image"),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Expanded(
-                          child: Text("Is In Stock"),
+                          child: Text("Status"),
                         ),
                       ),
                       DataColumn(
@@ -108,30 +98,19 @@ class _ManageProductState extends State<ManageProduct> {
                             Text("1"),
                           ),
                           DataCell(
-                            Text("Laptop"),
+                            Text("Akash"),
                           ),
                           DataCell(
-                            Text("123456789"),
+                            Text("Distributor"),
                           ),
                           DataCell(
-                            Text("STK12546789"),
+                            Text("Bilaspur"),
                           ),
                           DataCell(
-                            Text("1,22,222"),
+                            Text("Chhattissgarh"),
                           ),
                           DataCell(
-                            Container(
-                              width: 128,
-                              child: Text(
-                                "sk;dmk smd kdsksdfk sd;kfmds kfsd sd dskl lskdng lksdgkldsng lsn gl l",
-                              ),
-                            ),
-                          ),
-                          DataCell(
-                            Text("image 1"),
-                          ),
-                          DataCell(
-                            Text("True"),
+                            Text("Active"),
                           ),
                           DataCell(Row(
                             children: [

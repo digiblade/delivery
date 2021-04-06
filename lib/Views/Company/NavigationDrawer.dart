@@ -100,7 +100,7 @@ class NavigatorDrawer extends StatelessWidget {
                     Navigator.push(
                       newContext!,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => EditProduct(),
+                        builder: (BuildContext context) => ManageProduct(),
                       ),
                     );
                   },
