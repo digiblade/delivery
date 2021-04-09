@@ -1,4 +1,5 @@
 import 'package:delivery/Components/Button.dart';
+import 'package:delivery/Components/CustomDropdown.dart';
 import 'package:delivery/Components/InputField.dart';
 import 'package:flutter/material.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
@@ -20,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   // final auth = FirebaseAuth.instance;
 
   bool obscure = true;
-
+  int? type;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +64,19 @@ class _LoginPageState extends State<LoginPage> {
                       isFilled: true,
                       isPassword: false,
                       textColor: Colors.white,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: CustomDropdown(
+                      items: {
+                        'Company': 1,
+                        'Super Stokist': 2,
+                        'Distributor': 3,
+                        'Retailor': 4,
+                        'Area Sales Manager': 5,
+                      },
+                      onChange: changeVal,
                     ),
                   ),
                   Padding(
@@ -155,5 +169,12 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void changeVal(val) {
+    setState(() {
+      type = val;
+    });
+    print(type);
   }
 }
