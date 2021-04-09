@@ -39,6 +39,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
       child: DropdownButton<int>(
         items: dropdown,
         isExpanded: true,
+        value: value,
         hint: Center(
           child: Text(
             "Select Type",

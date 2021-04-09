@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'Company/HomePage.dart';
 import 'Register.dart';
+import 'SuperStokies/SSHome.dart';
 // import 'main.dart';
 
 class LoginPage extends StatefulWidget {
@@ -120,11 +121,17 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.white,
                     height: 60,
                     onPressed: () {
-                      print("demo");
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => HomePage(),
+                          builder: (BuildContext context) {
+                            switch (type) {
+                              case 1:
+                                return HomePage();
+                              default:
+                                return SSHome();
+                            }
+                          },
                         ),
                       );
                     },
