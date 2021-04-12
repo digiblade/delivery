@@ -1,5 +1,5 @@
 import 'package:delivery/Components/Color.dart';
-import 'package:delivery/Views/SuperStokies/NavigationDrawer.dart';
+import 'package:delivery/Views/SuperStokies/SSnavigator.dart';
 import 'package:flutter/material.dart';
 
 class SSHome extends StatefulWidget {

@@ -1,6 +1,7 @@
 import 'package:delivery/Components/Color.dart';
-import 'package:delivery/Views/Company/Product/ManageProduct.dart';
 import 'package:flutter/material.dart';
+
+import 'Orders/SSManageOrders.dart';
 
 class SSNavigator extends StatelessWidget {
   final BuildContext? newContext;
@@ -114,13 +115,13 @@ class SSNavigator extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      newContext!,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => ManageProduct(),
-                      ),
-                    );
+                    // Navigator.pop(context);
+                    // Navigator.push(
+                    //   newContext!,
+                    //   MaterialPageRoute(
+                    //     builder: (BuildContext context) => ManageProduct(),
+                    //   ),
+                    // );
                   },
                   child: ListTile(
                     leading: Icon(
@@ -140,20 +141,31 @@ class SSNavigator extends StatelessWidget {
                 Divider(
                   color: Colors.black,
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.supervised_user_circle,
-                    size: 32,
-                  ),
-                  title: Text(
-                    "My Orders",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ManageOrders(),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.supervised_user_circle,
+                      size: 32,
                     ),
-                  ),
-                  subtitle: Text(
-                    "Manage Orders",
+                    title: Text(
+                      "My Orders",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                    subtitle: Text(
+                      "Manage Orders",
+                    ),
                   ),
                 ),
                 Divider(
