@@ -1,3 +1,4 @@
+import 'package:delivery/Components/CategorySlider.dart';
 import 'package:delivery/Components/Color.dart';
 import 'package:delivery/Views/SuperStokies/SSnavigator.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +23,7 @@ class _SSHomeState extends State<SSHome> {
           newContext: context,
         ),
       ),
-      body: Center(
-        child: Text("Super Stockist"),
-      ),
+      body: HorizontalSlider(),
     );
   }
 }
