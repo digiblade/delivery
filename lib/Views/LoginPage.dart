@@ -1,7 +1,9 @@
 import 'package:delivery/Components/Button.dart';
 import 'package:delivery/Components/CustomDropdown.dart';
 import 'package:delivery/Components/InputField.dart';
+import 'package:delivery/Models/Authmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'Company/HomePage.dart';
@@ -121,19 +123,28 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.white,
                     height: 60,
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) {
-                            switch (type) {
-                              case 1:
-                                return HomePage();
-                              default:
-                                return SSHome();
-                            }
-                          },
-                        ),
+                      bool res = checkLogin(
+                        email: userCtrl.text,
+                        password: passCtrl.text,
+                        type: type,
                       );
+                      if (res) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              switch (type) {
+                                case 1:
+                                  return HomePage();
+                                default:
+                                  return SSHome();
+                              }
+                            },
+                          ),
+                        ); 
+                      }else{
+                        Fluttertoast.showToast(msg: "invalid credentials")
+                      }
                     },
                   ),
                   Center(
