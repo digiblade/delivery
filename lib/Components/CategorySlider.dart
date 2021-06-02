@@ -2,7 +2,7 @@ import 'package:delivery/Components/ProductCard.dart';
 import 'package:flutter/material.dart';
 
 class HorizontalSlider extends StatefulWidget {
-  HorizontalSlider({Key? key}) : super(key: key);
+  HorizontalSlider({Key key}) : super(key: key);
 
   @override
   _HorizontalSliderState createState() => _HorizontalSliderState();

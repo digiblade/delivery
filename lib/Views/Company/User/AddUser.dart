@@ -4,7 +4,7 @@ import 'package:delivery/Components/InputField.dart';
 import 'package:flutter/material.dart';
 
 class AddUsers extends StatefulWidget {
-  AddUsers({Key? key}) : super(key: key);
+  AddUsers({Key key}) : super(key: key);
 
   @override
   _AddUsersState createState() => _AddUsersState();

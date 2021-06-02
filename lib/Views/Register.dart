@@ -7,7 +7,7 @@ import 'Company/HomePage.dart';
 import 'LoginPage.dart';
 
 class RegisterPage extends StatefulWidget {
-  RegisterPage({Key? key}) : super(key: key);
+  RegisterPage({Key key}) : super(key: key);
 
   @override
   _RegisterPageState createState() => _RegisterPageState();

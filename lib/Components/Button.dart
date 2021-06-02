@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
-  final VoidCallback? onPressed;
-  final Color? color;
-  final String? text;
-  final Color? textColor;
+  final VoidCallback onPressed;
+  final Color color;
+  final String text;
+  final Color textColor;
   final double height;
   const Button({
-    Key? key,
-    required this.onPressed,
+    Key key,
+    @required this.onPressed,
     this.color = Colors.black,
     this.text,
     this.textColor = Colors.white,
@@ -27,7 +27,7 @@ class Button extends StatelessWidget {
         ),
         onPressed: onPressed,
         child: Text(
-          text!,
+          text,
           style: TextStyle(color: textColor),
         ),
       ),

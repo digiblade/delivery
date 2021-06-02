@@ -2,10 +2,10 @@ import 'package:delivery/Components/Color.dart';
 import 'package:flutter/material.dart';
 
 class CustomDropdown extends StatefulWidget {
-  final Map<String, int>? items;
-  final Function(dynamic)? onChange;
+  final Map<String, int> items;
+  final Function(dynamic) onChange;
   CustomDropdown({
-    Key? key,
+    Key key,
     this.items,
     this.onChange,
   }) : super(key: key);
@@ -20,7 +20,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
   @override
   void initState() {
     super.initState();
-    dropdown = widget.items!.entries.map((e) {
+    dropdown = widget.items.entries.map((e) {
       return DropdownMenuItem<int>(
         child: Center(
           child: Text(e.key),
@@ -55,11 +55,11 @@ class _CustomDropdownState extends State<CustomDropdown> {
           color: light,
           fontWeight: FontWeight.bold,
         ),
-        onChanged: (int? val) {
+        onChanged: (int val) {
           setState(() {
-            value = val!;
+            value = val;
           });
-          widget.onChange!(val);
+          widget.onChange(val);
         },
       ),
     );

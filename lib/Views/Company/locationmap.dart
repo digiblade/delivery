@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationPage extends StatefulWidget {
-  final String? email;
+  final String email;
 
   LocationPage({
-    Key? key,
+    Key key,
     this.email,
   }) : super(key: key);
 
@@ -24,24 +24,55 @@ class _LocationPageState extends State<LocationPage> {
       body: StreamBuilder(
         stream: firestore
             .collection("location")
-            .where("email", isEqualTo: widget.email)
+            // .where("email", isEqualTo: widget.email)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> ass) {
           if (ass.hasError) {
-            return Text('Something went wrong');
+            return Center(
+              child: Text(
+                'Something went wrong:' + ass.error.toString(),
+              ),
+            );
           }
 
           if (ass.connectionState == ConnectionState.waiting) {
-            return Text("Loading");
-          }
-
-          return ass.data.docs.map<Widget>((e) {
-            return LocationMapView(
-              title: e.data()['email'],
-              lat: e.data()['latitude'],
-              lan: e.data()['longitude'],
+            return Center(
+              child: Text("Loading..."),
             );
-          }).toList()[0];
+          }
+          if (ass.data.docs.length == 0) {
+            return Center(
+              child: Text(
+                  "No Location Found for user" + widget.email.toLowerCase()),
+            );
+          }
+          // return Center(
+          //   child: Text("data length = " +
+          //       ass.data.docs
+          //           .where((e) =>
+          //               (e.data()['email'] == widget.email.toLowerCase()))
+          //           .length
+          //           .toString() +
+          //       " for email:" +
+          //       widget.email.toLowerCase()),
+          // );
+          try {
+            return ass.data.docs
+                .where((e) => (e.data()['email'] == widget.email.toLowerCase()))
+                .map<Widget>((e) {
+              return LocationMapView(
+                title: e.data()['email'],
+                lat: e.data()['latitude'],
+                lan: e.data()['longitude'],
+              );
+            }).toList()[0];
+          } catch (e) {
+            print(e);
+            return Center(
+              child: Text(
+                  "No Location Found for user:" + widget.email.toLowerCase()),
+            );
+          }
         },
       ),
     );
@@ -54,15 +85,15 @@ class _LocationPageState extends State<LocationPage> {
 }
 
 class LocationMapView extends StatefulWidget {
-  final double? lat;
-  final double? lan;
+  final double lat;
+  final double lan;
   LocationMapView({
-    Key? key,
+    Key key,
     this.title,
     this.lat,
     this.lan,
   }) : super(key: key);
-  final String? title;
+  final String title;
   @override
   _LocationMapViewState createState() => _LocationMapViewState();
 }
@@ -74,11 +105,11 @@ class _LocationMapViewState extends State<LocationMapView> {
     markers = Set.from([]);
     updateMarkerAndCircle(widget.lat, widget.lan);
     if (_controller != null) {
-      _controller!.animateCamera(
+      _controller.animateCamera(
         CameraUpdate.newCameraPosition(
           new CameraPosition(
             bearing: 192.8334901395799,
-            target: LatLng(widget.lat!, widget.lan!),
+            target: LatLng(widget.lat, widget.lan),
             tilt: 0,
             zoom: 18.00,
           ),
@@ -87,11 +118,11 @@ class _LocationMapViewState extends State<LocationMapView> {
     }
   }
 
-  GoogleMapController? _controller;
-  BitmapDescriptor? customIcon1;
-  Set<Marker>? markers;
-  Marker? marker;
-  Circle? circle;
+  GoogleMapController _controller;
+  BitmapDescriptor customIcon1;
+  Set<Marker> markers;
+  Marker marker;
+  Circle circle;
   createMarker(context) {
     if (customIcon1 == null) {
       ImageConfiguration configuration = createLocalImageConfiguration(context);
@@ -112,7 +143,7 @@ class _LocationMapViewState extends State<LocationMapView> {
   }
 
   void updateMarkerAndCircle(latitude, longitude) async {
-    LatLng latlng = LatLng(latitude!, longitude!);
+    LatLng latlng = LatLng(latitude, longitude);
     Uint8List imageData = await getMarker();
 
     setState(() {
@@ -138,7 +169,7 @@ class _LocationMapViewState extends State<LocationMapView> {
 
   void getCurrentLocation(double latitude, double longitude) async {
     LatLng latlng = LatLng(latitude, longitude);
-    _controller!.animateCamera(
+    _controller.animateCamera(
       CameraUpdate.newCameraPosition(
         new CameraPosition(
           bearing: 192.8334901395799,
@@ -162,15 +193,15 @@ class _LocationMapViewState extends State<LocationMapView> {
     return GoogleMap(
       mapType: MapType.hybrid,
       initialCameraPosition: initialLocation,
-      markers: Set.of((marker != null) ? [marker!] : []),
-      circles: Set.of((circle != null) ? [circle!] : []),
+      markers: Set.of((marker != null) ? [marker] : []),
+      circles: Set.of((circle != null) ? [circle] : []),
       onMapCreated: (GoogleMapController controller) {
         _controller = controller;
-        _controller!.animateCamera(
+        _controller.animateCamera(
           CameraUpdate.newCameraPosition(
             new CameraPosition(
               bearing: 192.8334901395799,
-              target: LatLng(widget.lat!, widget.lan!),
+              target: LatLng(widget.lat, widget.lan),
               tilt: 0,
               zoom: 18.00,
             ),

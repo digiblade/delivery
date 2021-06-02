@@ -5,7 +5,7 @@ import 'NavigationDrawer.dart';
 import 'locationmap.dart';
 
 class UserData extends StatefulWidget {
-  UserData({Key? key}) : super(key: key);
+  UserData({Key key}) : super(key: key);
 
   @override
   _UserDataState createState() => _UserDataState();
@@ -54,12 +54,12 @@ class _UserDataState extends State<UserData> {
 }
 
 class UserCard extends StatelessWidget {
-  final String? name;
-  final String? subTitle;
-  final String? email;
+  final String name;
+  final String subTitle;
+  final String email;
 
   const UserCard({
-    Key? key,
+    Key key,
     this.name,
     this.subTitle,
     this.email,
@@ -83,8 +83,8 @@ class UserCard extends StatelessWidget {
           leading: CircleAvatar(
             backgroundImage: Image.asset("assets/user.png").image,
           ),
-          title: Text(name!),
-          subtitle: Text(subTitle!),
+          title: Text(name),
+          subtitle: Text(subTitle),
         ),
       ),
     );

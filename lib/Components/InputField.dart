@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class InputField extends StatelessWidget {
-  final TextEditingController? controller;
+  final TextEditingController controller;
   final bool isPassword;
-  final String? hint;
+  final String hint;
   final bool isFilled;
-  final Color? textColor;
-  final Color? hintColor;
-  final Color? fillColor;
-  final Color? borderColor;
+  final Color textColor;
+  final Color hintColor;
+  final Color fillColor;
+  final Color borderColor;
   const InputField({
-    Key? key,
+    Key key,
     this.controller,
     this.isPassword = false,
     this.hint,
@@ -48,7 +48,7 @@ class InputField extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
           borderSide: BorderSide(
             width: 1,
-            color: borderColor!,
+            color: borderColor,
             style: BorderStyle.solid,
           ),
         ),
@@ -56,7 +56,7 @@ class InputField extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
           borderSide: BorderSide(
             width: 1,
-            color: borderColor!,
+            color: borderColor,
             style: BorderStyle.solid,
           ),
         ),

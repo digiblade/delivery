@@ -6,7 +6,7 @@ import 'AddProduct.dart';
 import 'EditProduct.dart';
 
 class ManageProduct extends StatefulWidget {
-  ManageProduct({Key? key}) : super(key: key);
+  ManageProduct({Key key}) : super(key: key);
 
   @override
   _ManageProductState createState() => _ManageProductState();

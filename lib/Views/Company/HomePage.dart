@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'NavigationDrawer.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  HomePage({Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -24,31 +24,33 @@ class _HomePageState extends State<HomePage> {
           newContext: context,
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Dashboard",
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Dashboard",
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ProductGrid(),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ProductGrid(),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class ProductGrid extends StatelessWidget {
-  const ProductGrid({Key? key}) : super(key: key);
+  const ProductGrid({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +60,7 @@ class ProductGrid extends StatelessWidget {
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
         shrinkWrap: true,
+        primary: false,
         children: [
           ProductCard(
             onPressed: () {},

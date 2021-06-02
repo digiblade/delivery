@@ -4,7 +4,7 @@ import 'package:delivery/Views/SuperStokies/SSnavigator.dart';
 import 'package:flutter/material.dart';
 
 class SSHome extends StatefulWidget {
-  SSHome({Key? key}) : super(key: key);
+  SSHome({Key key}) : super(key: key);
 
   @override
   _SSHomeState createState() => _SSHomeState();

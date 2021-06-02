@@ -1,13 +1,15 @@
 import 'package:delivery/Views/Company/Product/ManageProduct.dart';
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
 import 'Order/ManageOrder.dart';
 import 'User/ManageUser.dart';
+import '../../Models/Authmodel.dart';
 
 class NavigatorDrawer extends StatelessWidget {
-  final BuildContext? newContext;
+  final BuildContext newContext;
   const NavigatorDrawer({
-    Key? key,
+    Key key,
     this.newContext,
   }) : super(key: key);
 
@@ -101,7 +103,7 @@ class NavigatorDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.push(
-                      newContext!,
+                      newContext,
                       MaterialPageRoute(
                         builder: (BuildContext context) => ManageProduct(),
                       ),
@@ -148,7 +150,7 @@ class NavigatorDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.push(
-                      newContext!,
+                      newContext,
                       MaterialPageRoute(
                         builder: (BuildContext context) => ManageUsers(),
                       ),
@@ -178,7 +180,7 @@ class NavigatorDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.push(
-                      newContext!,
+                      newContext,
                       MaterialPageRoute(
                         builder: (BuildContext context) => ManageOrders(),
                       ),
@@ -238,7 +240,12 @@ class NavigatorDrawer extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      print("logout");
+                      logout();
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/logout',
+                        (route) => false,
+                      );
                     },
                   ),
                 ],

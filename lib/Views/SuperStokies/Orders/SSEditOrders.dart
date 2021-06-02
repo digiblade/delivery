@@ -4,7 +4,7 @@ import 'package:delivery/Components/InputField.dart';
 import 'package:flutter/material.dart';
 
 class EditOrders extends StatefulWidget {
-  EditOrders({Key? key}) : super(key: key);
+  EditOrders({Key key}) : super(key: key);
 
   @override
   _EditOrdersState createState() => _EditOrdersState();

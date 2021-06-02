@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'Orders/SSManageOrders.dart';
 
 class SSNavigator extends StatelessWidget {
-  final BuildContext? newContext;
+  final BuildContext newContext;
   const SSNavigator({
-    Key? key,
+    Key key,
     this.newContext,
   }) : super(key: key);
 

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
-  final String? name;
-  final ImageProvider? bgImage;
-  final Color? bgColor;
+  final String name;
+  final ImageProvider bgImage;
+  final Color bgColor;
   final VoidCallback onPressed;
 
   const ProductCard({
-    Key? key,
+    Key key,
     this.name,
     this.bgImage,
-    required this.onPressed,
+    @required this.onPressed,
     this.bgColor = Colors.white,
   }) : super(key: key);
 
@@ -30,7 +30,7 @@ class ProductCard extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              name!,
+              name,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
