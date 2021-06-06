@@ -8,7 +8,7 @@ class ProductCard extends StatelessWidget {
 
   const ProductCard({
     Key key,
-    this.name,
+    this.name = "",
     this.bgImage,
     @required this.onPressed,
     this.bgColor = Colors.white,

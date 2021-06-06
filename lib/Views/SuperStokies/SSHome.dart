@@ -23,7 +23,20 @@ class _SSHomeState extends State<SSHome> {
           newContext: context,
         ),
       ),
-      body: HorizontalSlider(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(
+              "Products",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
