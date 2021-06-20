@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:delivery/main.dart';
+import 'package:delivery/Components/Color.dart';
+// import 'package:delivery/main.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -75,24 +76,41 @@ class _SMHomeState extends State<SMHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          logout();
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/logout',
-            (route) => false,
-          );
-        },
-        child: Icon(Icons.logout),
-      ),
-      body: Center(
-        child: Text(
-          "being monitor......\n" +
-              latitude.toString() +
-              "<>" +
-              longitude.toString(),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: primary,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            logout();
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/logout',
+              (route) => false,
+            );
+          },
+          child: Icon(Icons.logout),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+                width: double.infinity,
+                child: Center(
+                  child: Image.asset(
+                    "assets/gif/488.gif",
+                    height: 200,
+                  ),
+                )),
+            Text(
+              "being monitor......\n" +
+                  latitude.toString() +
+                  "<>" +
+                  longitude.toString(),
+            ),
+          ],
         ),
       ),
     );

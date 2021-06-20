@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/Components/Color.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -253,8 +253,8 @@ class _ManageUsersState extends State<ManageUsers> {
   }
 
   checkLocation(String email) async {
-    dynamic location =
-        await FirebaseFirestore.instance.collection('location').get();
+    // dynamic location =
+    //     await FirebaseFirestore.instance.collection('location').get();
     print(email);
     // print(location.data());
     // if (location.exists) {

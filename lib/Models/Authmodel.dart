@@ -21,6 +21,7 @@ checkLogin({
     dynamic data = response.data;
     res = data['response'];
   }
+  print(email);
   if (res) {
     pref.setBool("islogin", true);
     pref.setString("userid", email);

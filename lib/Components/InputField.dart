@@ -9,6 +9,8 @@ class InputField extends StatelessWidget {
   final Color hintColor;
   final Color fillColor;
   final Color borderColor;
+  final TextInputType keyType;
+  final Function(String) onChange;
   const InputField({
     Key key,
     this.controller,
@@ -19,6 +21,8 @@ class InputField extends StatelessWidget {
     this.hintColor,
     this.fillColor,
     this.borderColor,
+    this.keyType = TextInputType.emailAddress,
+    this.onChange,
   }) : super(key: key);
 
   @override
@@ -27,7 +31,10 @@ class InputField extends StatelessWidget {
       obscureText: isPassword,
       controller: controller,
       textAlign: TextAlign.center,
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: keyType,
+      onSubmitted: (val) {
+        onChange(val);
+      },
       style: TextStyle(
         color: textColor,
       ),

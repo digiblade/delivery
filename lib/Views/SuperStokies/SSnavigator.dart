@@ -1,7 +1,9 @@
 import 'package:delivery/Components/Color.dart';
+import 'package:delivery/Models/Authmodel.dart';
+import 'package:delivery/Views/SuperStokies/SSOrder.dart';
 import 'package:flutter/material.dart';
 
-import 'Orders/SSManageOrders.dart';
+// import 'Orders/SSManageOrders.dart';
 
 class SSNavigator extends StatelessWidget {
   final BuildContext newContext;
@@ -40,11 +42,6 @@ class SSNavigator extends StatelessWidget {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             alignment: WrapAlignment.spaceBetween,
                             children: [
-                              CircleAvatar(
-                                radius: 32,
-                                backgroundImage:
-                                    Image.asset("assets/user.jpg").image,
-                              ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
@@ -59,7 +56,7 @@ class SSNavigator extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0, vertical: 16),
+                                horizontal: 8.0, vertical: 8),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -147,7 +144,7 @@ class SSNavigator extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => ManageOrders(),
+                        builder: (BuildContext context) => SSOrder(),
                       ),
                     );
                   },
@@ -168,55 +165,55 @@ class SSNavigator extends StatelessWidget {
                     ),
                   ),
                 ),
-                Divider(
-                  color: Colors.black,
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.supervised_user_circle,
-                    size: 32,
-                  ),
-                  title: Text(
-                    "Manage Stocks",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                    ),
-                  ),
-                  subtitle: Text(
-                    "Manage Product Stocks",
-                  ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    // Navigator.push(
-                    //   newContext!,
-                    //   MaterialPageRoute(
-                    //     builder: (BuildContext context) => ManageUsers(),
-                    //   ),
-                    // );
-                  },
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.supervised_user_circle,
-                      size: 32,
-                    ),
-                    title: Text(
-                      "Manage Distributors",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    ),
-                    subtitle: Text(
-                      "Manage All Distributors",
-                    ),
-                  ),
-                ),
+                // Divider(
+                //   color: Colors.black,
+                // ),
+                // ListTile(
+                //   leading: Icon(
+                //     Icons.supervised_user_circle,
+                //     size: 32,
+                //   ),
+                //   title: Text(
+                //     "Manage Stocks",
+                //     style: TextStyle(
+                //       color: Colors.black,
+                //       fontSize: 20,
+                //     ),
+                //   ),
+                //   subtitle: Text(
+                //     "Manage Product Stocks",
+                //   ),
+                // ),
+                // Divider(
+                //   color: Colors.black,
+                // ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     // Navigator.push(
+                //     //   newContext!,
+                //     //   MaterialPageRoute(
+                //     //     builder: (BuildContext context) => ManageUsers(),
+                //     //   ),
+                //     // );
+                //   },
+                //   child: ListTile(
+                //     leading: Icon(
+                //       Icons.supervised_user_circle,
+                //       size: 32,
+                //     ),
+                //     title: Text(
+                //       "Manage Distributors",
+                //       style: TextStyle(
+                //         color: Colors.black,
+                //         fontSize: 20,
+                //       ),
+                //     ),
+                //     subtitle: Text(
+                //       "Manage All Distributors",
+                //     ),
+                //   ),
+                // ),
                 Divider(
                   color: Colors.black,
                 ),
@@ -284,7 +281,12 @@ class SSNavigator extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      print("logout");
+                      logout();
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/logout',
+                        (route) => false,
+                      );
                     },
                   ),
                 ],

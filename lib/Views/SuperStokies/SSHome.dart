@@ -1,5 +1,8 @@
-import 'package:delivery/Components/CategorySlider.dart';
+import 'package:animations/animations.dart';
+// import 'package:delivery/Components/CategorySlider.dart';
 import 'package:delivery/Components/Color.dart';
+import 'package:delivery/Components/InputField.dart';
+import 'package:delivery/Views/SuperStokies/SSPurchase.dart';
 import 'package:delivery/Views/SuperStokies/SSnavigator.dart';
 import 'package:flutter/material.dart';
 
@@ -25,17 +28,157 @@ class _SSHomeState extends State<SSHome> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Text(
-              "Products",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(),
+              Text(
+                "Products",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              // ProductGrid(
+              //   onTap: navigate,
+              // )
+              Container(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  shrinkWrap: true,
+                  primary: false,
+                  children: [
+                    OpenContainer(
+                      closedBuilder: (context, action) => ProductCard(),
+                      openBuilder: (context, action) => SSpurchase(),
+                    ),
+                    ProductCard(),
+                    ProductCard(),
+                    ProductCard(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // navigate() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (BuildContext context) => SSpurchase(),
+  //     ),
+  //   );
+  // }
+}
+
+// class ProductGrid extends StatelessWidget {
+//   final Function onTap;
+//   const ProductGrid({
+//     Key key,
+//     this.onTap,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: GridView.count(
+//         crossAxisCount: 2,
+//         crossAxisSpacing: 8,
+//         mainAxisSpacing: 8,
+//         shrinkWrap: true,
+//         primary: false,
+//         children: [
+//           OpenContainer(
+//             closedBuilder: (context, action) => ProductCard(),
+//             openBuilder: (context, action) => SSpurchase(),
+//           ),
+//           ProductCard(),
+//           ProductCard(),
+//           ProductCard(),
+//           ProductCard(),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+class ProductCard extends StatelessWidget {
+  const ProductCard({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: Image.network(
+            "https://digiblade.in/popposapi/images/biryani.jpeg",
+          ).image,
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                // width: double.infinity,
+                color: primary,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 12,
+                  ),
+                  child: Text(
+                    "160/-",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: light,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                // width: double.infinity,
+                color: light.withOpacity(0.6),
+                child: ListTile(
+                  title: Text(
+                    "Prodctname",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  subtitle: Text(
+                    "Prodctname",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

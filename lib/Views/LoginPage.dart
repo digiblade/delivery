@@ -28,8 +28,13 @@ class _LoginPageState extends State<LoginPage> {
   bool obscure = true;
   int type = 1;
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     checkLoginData(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
@@ -84,8 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                           'Company': 1,
                           'Super Stokist': 2,
                           'Distributor': 3,
-                          'Retailor': 4,
-                          'Area Sales Manager': 5,
+                          'Area Sales Manager': 4,
                         },
                         onChange: changeVal,
                       ),
@@ -149,8 +153,6 @@ class _LoginPageState extends State<LoginPage> {
                                   case 3:
                                     return SSHome();
                                   case 4:
-                                    return SSHome();
-                                  case 5:
                                     return SMHome();
                                   default:
                                     return SSHome();
@@ -226,8 +228,6 @@ class _LoginPageState extends State<LoginPage> {
               case 3:
                 return SSHome();
               case 4:
-                return SSHome();
-              case 5:
                 return SMHome();
               default:
                 return LoginPage();
