@@ -1,7 +1,9 @@
 import 'package:animations/animations.dart';
 // import 'package:delivery/Components/CategorySlider.dart';
 import 'package:delivery/Components/Color.dart';
-import 'package:delivery/Components/InputField.dart';
+// import 'package:delivery/Components/InputField.dart';
+import 'package:delivery/Models/AllUrl.dart';
+import 'package:delivery/Models/ProductModel.dart';
 import 'package:delivery/Views/SuperStokies/SSPurchase.dart';
 import 'package:delivery/Views/SuperStokies/SSnavigator.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +34,6 @@ class _SSHomeState extends State<SSHome> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(),
               Text(
                 "Products",
                 style: TextStyle(
@@ -47,21 +48,39 @@ class _SSHomeState extends State<SSHome> {
               //   onTap: navigate,
               // )
               Container(
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                  shrinkWrap: true,
-                  primary: false,
-                  children: [
-                    OpenContainer(
-                      closedBuilder: (context, action) => ProductCard(),
-                      openBuilder: (context, action) => SSpurchase(),
-                    ),
-                    ProductCard(),
-                    ProductCard(),
-                    ProductCard(),
-                  ],
+                child: FutureBuilder(
+                  future: getProduct(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      List<Product> data = snapshot.data;
+                      return GridView.count(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                        shrinkWrap: true,
+                        primary: false,
+                        children: data.map(
+                          (e) {
+                            return OpenContainer(
+                              closedBuilder: (context, action) => ProductCard(
+                                image: e.image,
+                                price: e.stokistPrice,
+                                name: e.productName,
+                                description: e.description,
+                              ),
+                              openBuilder: (context, action) => SSpurchase(
+                                prod: e,
+                              ),
+                            );
+                          },
+                        ).toList(),
+                      );
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
                 ),
               ),
             ],
@@ -70,50 +89,20 @@ class _SSHomeState extends State<SSHome> {
       ),
     );
   }
-
-  // navigate() {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (BuildContext context) => SSpurchase(),
-  //     ),
-  //   );
-  // }
 }
 
-// class ProductGrid extends StatelessWidget {
-//   final Function onTap;
-//   const ProductGrid({
-//     Key key,
-//     this.onTap,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: GridView.count(
-//         crossAxisCount: 2,
-//         crossAxisSpacing: 8,
-//         mainAxisSpacing: 8,
-//         shrinkWrap: true,
-//         primary: false,
-//         children: [
-//           OpenContainer(
-//             closedBuilder: (context, action) => ProductCard(),
-//             openBuilder: (context, action) => SSpurchase(),
-//           ),
-//           ProductCard(),
-//           ProductCard(),
-//           ProductCard(),
-//           ProductCard(),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class ProductCard extends StatelessWidget {
-  const ProductCard({Key key}) : super(key: key);
+  final String image;
+  final String price;
+  final String name;
+  final String description;
+  const ProductCard({
+    Key key,
+    this.image = "",
+    this.price = "",
+    this.name = "",
+    this.description = "",
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +110,7 @@ class ProductCard extends StatelessWidget {
       decoration: BoxDecoration(
         image: DecorationImage(
           image: Image.network(
-            "https://digiblade.in/popposapi/images/biryani.jpeg",
+            imageurl + "product/" + image,
           ).image,
           fit: BoxFit.cover,
         ),
@@ -138,10 +127,10 @@ class ProductCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: 8.0,
-                    horizontal: 12,
+                    horizontal: 8,
                   ),
                   child: Text(
-                    "160/-",
+                    (price != null) ? price + " /-" : "",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: light,
@@ -154,26 +143,23 @@ class ProductCard extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                // width: double.infinity,
-                color: light.withOpacity(0.6),
-                child: ListTile(
-                  title: Text(
-                    "Prodctname",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
+            child: Container(
+              // width: double.infinity,/
+              color: light,
+              child: ListTile(
+                title: Text(
+                  name ?? "",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
-                  subtitle: Text(
-                    "Prodctname",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
+                  textAlign: TextAlign.center,
+                ),
+                subtitle: Text(
+                  description ?? "",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),

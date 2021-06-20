@@ -1,13 +1,18 @@
 import 'package:delivery/Components/Button.dart';
 import 'package:delivery/Components/Color.dart';
 import 'package:delivery/Components/InputField.dart';
+import 'package:delivery/Models/ProductModel.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:delivery/Models/AllUrl.dart';
 import 'SSnavigator.dart';
 
 class SSpurchase extends StatefulWidget {
-  SSpurchase({Key key}) : super(key: key);
+  final Product prod;
+  SSpurchase({
+    Key key,
+    this.prod,
+  }) : super(key: key);
 
   @override
   _SSpurchaseState createState() => _SSpurchaseState();
@@ -26,24 +31,35 @@ class _SSpurchaseState extends State<SSpurchase> {
           newContext: context,
         ),
       ),
-      body: PurchaseBody(),
+      body: PurchaseBody(
+        data: widget.prod,
+      ),
     );
   }
 }
 
 class PurchaseBody extends StatefulWidget {
-  const PurchaseBody({Key key}) : super(key: key);
+  final Product data;
+  const PurchaseBody({
+    Key key,
+    this.data,
+  }) : super(key: key);
 
   @override
   _PurchaseBodyState createState() => _PurchaseBodyState();
 }
 
 class _PurchaseBodyState extends State<PurchaseBody> {
+  int skuid = 0;
+  List<Sku> sku = [];
+  int skuval = 0;
   final TextEditingController quantity = TextEditingController();
+  final TextEditingController yourPrice = TextEditingController();
   @override
   void initState() {
     super.initState();
     quantity.text = "0";
+    getSku();
   }
 
   checkIsDouble(String data) {
@@ -51,6 +67,28 @@ class _PurchaseBodyState extends State<PurchaseBody> {
       quantity.text = (int.parse(data)).toString();
     } catch (e) {
       quantity.text = "0";
+    }
+  }
+
+  getSku() {
+    print(widget.data.sku.length);
+    for (dynamic res in widget.data.sku) {
+      int count = 0;
+      for (dynamic r in sku) {
+        if (r.skuid == res.skuid) {
+          count++;
+        }
+      }
+      if (count == 0) {
+        setState(() {
+          sku.add(res);
+        });
+      }
+    }
+    if (sku.length > 0) {
+      setState(() {
+        skuval = sku[0].skuid;
+      });
     }
   }
 
@@ -64,7 +102,7 @@ class _PurchaseBodyState extends State<PurchaseBody> {
             height: MediaQuery.of(context).size.height / 4,
             width: double.infinity,
             child: Image.network(
-              "https://digiblade.in/popposapi/images/biryani.jpeg",
+              imageurl + "product/" + widget.data.image,
               // width: double.infinity,
               fit: BoxFit.cover,
             ),
@@ -77,7 +115,7 @@ class _PurchaseBodyState extends State<PurchaseBody> {
             child: Padding(
               padding: EdgeInsets.all(8),
               child: Text(
-                "Price: INR 160/-",
+                "Price: INR " + widget.data.stokistPrice + "/-",
                 style: TextStyle(
                   fontSize: 20,
                   color: grey,
@@ -88,28 +126,40 @@ class _PurchaseBodyState extends State<PurchaseBody> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Product Name",
+              widget.data.productName,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "10Kg",
-              style: TextStyle(
-                fontSize: 16,
-                // fontWeight: FontWeight.bold,
-                color: grey,
-              ),
-            ),
-          ),
+          FutureBuilder(builder: (context, snapshot) {
+            if (sku.length > 0) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropDown(
+                  value: skuval,
+                  onChange: (val) {
+                    skuval = val;
+                  },
+                  item: sku.map(
+                    (e) {
+                      return DropdownMenuItem(
+                        value: e.skuid,
+                        child: Text(e.name),
+                      );
+                    },
+                  ).toList(),
+                ),
+              );
+            } else {
+              return Container();
+            }
+          }),
           Padding(
             padding: EdgeInsets.all(8),
             child: Text(
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+              widget.data.description ?? "",
             ),
           ),
           Padding(
@@ -168,6 +218,7 @@ class _PurchaseBodyState extends State<PurchaseBody> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: InputField(
+              controller: yourPrice,
               borderColor: primary.withOpacity(0.6),
               fillColor: light.withOpacity(0.1),
               hint: "Your Price",
@@ -177,6 +228,13 @@ class _PurchaseBodyState extends State<PurchaseBody> {
             padding: const EdgeInsets.all(8.0),
             child: Button(
               onPressed: () {
+                Cart cart = Cart(
+                  productId: widget.data.id,
+                  productName: widget.data.productName,
+                  quantity: int.parse(quantity.text) ?? 0,
+                  yourPrice: yourPrice.text,
+                );
+                addToCart(cart);
                 Fluttertoast.showToast(msg: "Product added in cart");
               },
               text: "Buy",
@@ -185,5 +243,37 @@ class _PurchaseBodyState extends State<PurchaseBody> {
         ],
       ),
     );
+  }
+}
+
+class DropDown extends StatefulWidget {
+  final int value;
+  final Function(int) onChange;
+  final List<DropdownMenuItem> item;
+  DropDown({
+    Key key,
+    this.item,
+    this.value,
+    this.onChange,
+  }) : super(key: key);
+
+  @override
+  _DropDownState createState() => _DropDownState();
+}
+
+class _DropDownState extends State<DropDown> {
+  @override
+  Widget build(BuildContext context) {
+    if (widget.item.length > 0) {
+      return DropdownButton(
+        onChanged: (val) {
+          widget.onChange(val);
+        },
+        value: widget.value,
+        items: widget.item,
+      );
+    } else {
+      return Container();
+    }
   }
 }
