@@ -3,6 +3,8 @@ import 'package:delivery/Models/Authmodel.dart';
 import 'package:delivery/Views/SuperStokies/SSOrder.dart';
 import 'package:flutter/material.dart';
 
+import 'CartPage.dart';
+
 // import 'Orders/SSManageOrders.dart';
 
 class SSNavigator extends StatelessWidget {
@@ -127,6 +129,34 @@ class SSNavigator extends StatelessWidget {
                     ),
                     title: Text(
                       "Buy Products",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                    subtitle: Text("All Products"),
+                  ),
+                ),
+                Divider(
+                  color: Colors.black,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      newContext,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => CartPage(),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.supervised_user_circle,
+                      size: 32,
+                    ),
+                    title: Text(
+                      "View Cart",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 20,

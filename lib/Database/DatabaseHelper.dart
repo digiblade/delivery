@@ -133,7 +133,7 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> queryTableData(
       {String table, String key, dynamic value}) async {
     Database db = await instance.database;
-    return await db.query("$table", where: "$key: ?", whereArgs: [value]);
+    return await db.query("$table", where: "$key= ?", whereArgs: [value]);
   }
 
   Future<int> insertTable(Map<String, dynamic> row, table) async {
