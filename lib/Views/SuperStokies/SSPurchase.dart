@@ -140,7 +140,10 @@ class _PurchaseBodyState extends State<PurchaseBody> {
                 child: DropDown(
                   value: skuval,
                   onChange: (val) {
-                    skuval = val;
+                    print("skuval:$val");
+                    setState(() {
+                      skuval = val;
+                    });
                   },
                   item: sku.map(
                     (e) {
@@ -221,7 +224,7 @@ class _PurchaseBodyState extends State<PurchaseBody> {
               controller: yourPrice,
               borderColor: primary.withOpacity(0.6),
               fillColor: light.withOpacity(0.1),
-              hint: "Your Price",
+              hint: "Your Price:",
             ),
           ),
           Padding(
@@ -233,6 +236,21 @@ class _PurchaseBodyState extends State<PurchaseBody> {
                   productName: widget.data.productName,
                   quantity: int.parse(quantity.text) ?? 0,
                   yourPrice: yourPrice.text,
+                  productImage: widget.data.image,
+                  skuid: skuval,
+                  price: widget.data.stokistPrice,
+                  sku: (sku.length > 0)
+                      ? sku
+                          .where((e) {
+                            if (e.skuid == skuval) {
+                              return true;
+                            } else {
+                              return false;
+                            }
+                          })
+                          .toList()[0]
+                          .name
+                      : "No SKU",
                 );
                 addToCart(cart);
                 Fluttertoast.showToast(msg: "Product added in cart");

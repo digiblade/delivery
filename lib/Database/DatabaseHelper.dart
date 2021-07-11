@@ -113,11 +113,33 @@ class DatabaseHelper {
     return await db.delete(table, where: "$key=?", whereArgs: [id]);
   }
 
+  Future<int> deleteTableMultiData(
+      List<String> keys, List<dynamic> value, String table) async {
+    Database db = await instance.database;
+    String key = " ";
+    for (String i in keys) {
+      key += i + " = ? and ";
+    }
+    key = key.substring(0, key.length - 4);
+    return await db.delete(table, where: key, whereArgs: value);
+  }
+
   Future updateTableData(
       Map<String, dynamic> row, String key, int id, String table) async {
     Database db = await instance.database;
 
     return await db.update(table, row, where: '$key = ?', whereArgs: [id]);
+  }
+
+  Future updateTableMultiData(Map<String, dynamic> row, List<String> keys,
+      List<dynamic> value, String table) async {
+    Database db = await instance.database;
+    String key = " ";
+    for (String i in keys) {
+      key += i + " = ? and ";
+    }
+    key = key.substring(0, key.length - 4);
+    return await db.update(table, row, where: key, whereArgs: value);
   }
 
   truncateTable(String table) async {
@@ -134,6 +156,17 @@ class DatabaseHelper {
       {String table, String key, dynamic value}) async {
     Database db = await instance.database;
     return await db.query("$table", where: "$key= ?", whereArgs: [value]);
+  }
+
+  Future<List<Map<String, dynamic>>> queryTableMultiData(
+      {String table, List<String> keys, List<dynamic> value}) async {
+    Database db = await instance.database;
+    String key = " ";
+    for (String i in keys) {
+      key += i + " = ? and ";
+    }
+    key = key.substring(0, key.length - 4);
+    return await db.query("$table", where: key, whereArgs: value);
   }
 
   Future<int> insertTable(Map<String, dynamic> row, table) async {

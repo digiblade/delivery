@@ -42,14 +42,14 @@ class _PurchaseBodyState extends State<PurchaseBody> {
   @override
   void initState() {
     super.initState();
-    quantity.text = "0";
+    quantity.text = "1";
   }
 
   checkIsDouble(String data) {
     try {
       quantity.text = (double.parse(data)).toString();
     } catch (e) {
-      quantity.text = "0";
+      quantity.text = "1";
     }
   }
 

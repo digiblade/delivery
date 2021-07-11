@@ -6,23 +6,66 @@ import 'package:flutter/material.dart';
 
 import 'SSnavigator.dart';
 
-class CartPage extends StatelessWidget {
+class CartPage extends StatefulWidget {
   const CartPage({Key key}) : super(key: key);
-  getCartProduct() async {
-    List<Map<String, dynamic>> check =
-        await DatabaseHelper.instance.queryAllTableData(table: "tblcart");
+
+  @override
+  _CartPageState createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+  refresh() {
+    setState(() {
+      getCartProduct();
+      getTotal();
+    });
+  }
+
+  double totalData = 0;
+  Future<List<Cart>> getCartProduct() async {
     List<Cart> cart = [];
-    for (dynamic res in check) {
-      Cart c = Cart(
-        productId: res['productid'],
-        productImage: res['image'],
-        productName: res['productname'],
-        quantity: res['quantity'],
-        yourPrice: res['yourprice'],
-      );
-      cart.add(c);
+    try {
+      List<Map<String, dynamic>> check =
+          await DatabaseHelper.instance.queryAllTableData(table: "tblcart");
+
+      for (dynamic res in check) {
+        print(res);
+        Cart c = Cart(
+          productId: res['productid'],
+          productImage: res['image'],
+          productName: res['productname'],
+          quantity: res['quantity'],
+          yourPrice: (res['yourprice']).toString(),
+          sku: res['sku'],
+          skuid: res['skuid'],
+          price: res['price'].toString(),
+          tableid: res['tblcart_id'],
+        );
+        cart.add(c);
+      }
+    } catch (e, s) {
+      print(e);
+      print(s);
     }
+
     return cart;
+  }
+
+  getTotal() async {
+    List<Cart> data = await getCartProduct();
+    double total = 0;
+    for (Cart i in data) {
+      total += double.parse(i.price) * i.quantity;
+    }
+    setState(() {
+      totalData = total;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getTotal();
   }
 
   @override
@@ -56,7 +99,7 @@ class CartPage extends StatelessWidget {
                     child: Wrap(
                       children: [
                         Text("Proceed Order with "),
-                        Text("Total: 14000/-"),
+                        Text("Total: $totalData/-"),
                       ],
                     ),
                   ),
@@ -69,7 +112,7 @@ class CartPage extends StatelessWidget {
                     future: getCartProduct(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        List<Map<String, dynamic>> data = snapshot.data;
+                        List<Cart> data = snapshot.data;
                         if (data.length == 0) {
                           return Center(
                             child: Text("No product added into cart"),
@@ -84,7 +127,12 @@ class CartPage extends StatelessWidget {
                             Column(
                               children: data.map((e) {
                                 return CartProduct(
-                                  image: e['productImage'],
+                                  image: e.productImage ?? "",
+                                  qty: e.quantity.toString(),
+                                  productPrice: e.yourPrice,
+                                  yourprice: e.price,
+                                  tableid: e.tableid,
+                                  callback: refresh,
                                 );
                               }).toList(),
                             ),
@@ -109,9 +157,21 @@ class CartPage extends StatelessWidget {
 
 class CartProduct extends StatefulWidget {
   final String image;
+  final String productPrice;
+  final String qty;
+  final String yourprice;
+  final int tableid;
+  final int skuid;
+  final Function callback;
   CartProduct({
     Key key,
     this.image,
+    this.productPrice,
+    this.qty = "0",
+    this.yourprice,
+    this.tableid,
+    this.skuid,
+    this.callback,
   }) : super(key: key);
 
   @override
@@ -121,6 +181,7 @@ class CartProduct extends StatefulWidget {
 class _CartProductState extends State<CartProduct> {
   @override
   Widget build(BuildContext context) {
+    // print(widget.image);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
@@ -131,10 +192,16 @@ class _CartProductState extends State<CartProduct> {
         ),
         title: Text("product name"),
         subtitle: Text(
-          "qty. 1, price: 150/- " "\n" "your price",
+          "qty. ${widget.qty}, price: ${widget.productPrice}/- "
+          "\n"
+          "your price: ${widget.yourprice}",
         ),
         trailing: GestureDetector(
-          onTap: () {},
+          onTap: () async {
+            print(widget.tableid);
+            await removeProduct(widget.tableid);
+            widget.callback();
+          },
           child: Container(
             decoration: BoxDecoration(
               color: danger.withRed(200),

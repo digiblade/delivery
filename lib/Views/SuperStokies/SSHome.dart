@@ -59,7 +59,7 @@ class _SSHomeState extends State<SSHome> {
                         mainAxisSpacing: 8,
                         shrinkWrap: true,
                         primary: false,
-                        children: data.map(
+                        children: data.where((e) => e.sku.length > 0).map(
                           (e) {
                             return OpenContainer(
                               closedBuilder: (context, action) => ProductCard(

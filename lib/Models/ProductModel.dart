@@ -80,13 +80,20 @@ class Cart {
   final String productImage;
   int quantity;
   final String yourPrice;
-  Cart({
-    this.productId,
-    this.productName,
-    this.yourPrice,
-    this.quantity,
-    this.productImage,
-  });
+  final String sku;
+  final int skuid;
+  final String price;
+  final int tableid;
+  Cart(
+      {this.productId,
+      this.productName,
+      this.yourPrice,
+      this.quantity,
+      this.productImage,
+      this.sku,
+      this.skuid,
+      this.price,
+      this.tableid});
 }
 
 createCartTable() {
@@ -103,6 +110,12 @@ createCartTable() {
     isNull: "NULL",
   );
   column.add(productName);
+  Table price = Table(
+    columnName: "price",
+    columnType: "String",
+    isNull: "NULL",
+  );
+  column.add(price);
   Table yourPrice = Table(
     columnName: "yourprice",
     columnType: "String",
@@ -121,6 +134,18 @@ createCartTable() {
     isNull: "NULL",
   );
   column.add(image);
+  Table sku = Table(
+    columnName: "sku",
+    columnType: "String",
+    isNull: "NULL",
+  );
+  column.add(sku);
+  Table skuid = Table(
+    columnName: "skuid",
+    columnType: "int",
+    isNull: "NULL",
+  );
+  column.add(skuid);
   DatabaseHelper.instance.createTable("tblcart", column);
 }
 
@@ -128,8 +153,10 @@ addToCart(Cart prod) async {
   await createCartTable();
 
   List<Map<String, dynamic>> check = await DatabaseHelper.instance
-      .queryTableData(
-          table: "tblcart", key: "productid", value: prod.productId);
+      .queryTableMultiData(
+          table: "tblcart",
+          keys: ["productid", "skuid"],
+          value: [prod.productId, prod.skuid]);
   print(check.length);
   if (check.length == 0) {
     Map<String, dynamic> row = {
@@ -137,7 +164,10 @@ addToCart(Cart prod) async {
       "productname": prod.productName,
       "yourprice": prod.yourPrice,
       "quantity": prod.quantity,
-      "image": prod.productImage
+      "image": prod.productImage,
+      "price": prod.price,
+      "sku": prod.sku,
+      "skuid": prod.skuid,
     };
     DatabaseHelper.instance.insertTable(row, "tblcart");
   } else {
@@ -146,11 +176,24 @@ addToCart(Cart prod) async {
       "productname": prod.productName,
       "yourprice": prod.yourPrice,
       "quantity": prod.quantity,
-      "image": prod.productImage
+      "image": prod.productImage,
+      "price": prod.price,
+      "sku": prod.sku,
+      "skuid": prod.skuid,
     };
     DatabaseHelper.instance
         .updateTableData(row, "productid", prod.productId, "tblcart");
   }
+}
+
+removeProduct(tableid) async {
+  print(tableid);
+  dynamic data = await DatabaseHelper.instance.deleteTableData(
+    tableid,
+    "tblcart_id",
+    "tblcart",
+  );
+  print(data);
 }
 
 Future<List<Map<String, dynamic>>> getCartProduct() async {
