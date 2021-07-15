@@ -1,6 +1,5 @@
 import 'package:delivery/Database/DatabaseHelper.dart';
 import 'package:delivery/Database/ModelToDB.dart';
-import 'package:delivery/Views/SuperStokies/CartPage.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -224,7 +223,7 @@ placeOrder(List<Cart> product) async {
           "userid": userid,
         },
       );
-      dynamic response = await dio.post(
+      await dio.post(
         api + "order/create",
         data: form,
       );

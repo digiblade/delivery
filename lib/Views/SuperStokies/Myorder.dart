@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 // import 'package:delivery/Components/CategorySlider.dart';
 import 'package:delivery/Components/Color.dart';
 // import 'package:delivery/Components/InputField.dart';
