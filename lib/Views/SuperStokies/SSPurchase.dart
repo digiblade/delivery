@@ -231,6 +231,9 @@ class _PurchaseBodyState extends State<PurchaseBody> {
             padding: const EdgeInsets.all(8.0),
             child: Button(
               onPressed: () {
+                if (yourPrice.text.length == 0) {
+                  yourPrice.text = "NA";
+                }
                 Cart cart = Cart(
                   productId: widget.data.id,
                   productName: widget.data.productName,

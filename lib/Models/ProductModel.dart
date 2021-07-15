@@ -1,6 +1,8 @@
 import 'package:delivery/Database/DatabaseHelper.dart';
 import 'package:delivery/Database/ModelToDB.dart';
+import 'package:delivery/Views/SuperStokies/CartPage.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'AllUrl.dart';
 
@@ -200,4 +202,93 @@ Future<List<Map<String, dynamic>>> getCartProduct() async {
   List<Map<String, dynamic>> check =
       await DatabaseHelper.instance.queryAllTableData(table: "tblcart");
   return check;
+}
+
+placeOrder(List<Cart> product) async {
+  try {
+    Dio dio = Dio();
+    String groupid = DateTime.now().toString();
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String userid = pref.getString("userid");
+
+    int type = pref.getInt('type');
+    for (Cart i in product) {
+      FormData form = FormData.fromMap(
+        {
+          "productid": i.productId,
+          "yourprice": i.yourPrice,
+          "skuid": i.skuid,
+          "quantity": i.quantity,
+          "groupid": groupid,
+          "usertype": type,
+          "userid": userid,
+        },
+      );
+      dynamic response = await dio.post(
+        api + "order/create",
+        data: form,
+      );
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+class Order {
+  final int sNo;
+  final String product;
+  final String sku;
+  final String hsn;
+  final String price;
+  final String yourprice;
+  final String date;
+  Order({
+    this.sNo,
+    this.product,
+    this.sku,
+    this.hsn,
+    this.price,
+    this.yourprice,
+    this.date,
+  });
+}
+
+Future<List<Order>> getOrder() async {
+  List<Order> ord = [];
+  try {
+    Dio dio = Dio();
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String userid = pref.getString("userid");
+
+    FormData form = FormData.fromMap(
+      {
+        "userid": userid,
+      },
+    );
+    dynamic response = await dio.post(
+      api + "order/view",
+      data: form,
+    );
+
+    if (response.statusCode == 200) {
+      dynamic data = response.data;
+      int ind = 1;
+      for (dynamic i in data.reversed) {
+        Order o = Order(
+          sNo: ind++,
+          product: i['product']['product_name'],
+          sku: i['sku']['category_name'],
+          date: i['created_at'],
+          hsn: i['product']['product_hsncode'],
+          price: i['product']['product_stokistprice'],
+          yourprice: i['order_userprice'],
+        );
+        ord.add(o);
+      }
+    }
+  } catch (e) {
+    print(e);
+  }
+  return ord;
 }

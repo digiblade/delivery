@@ -1,9 +1,11 @@
 import 'package:delivery/Components/Color.dart';
 import 'package:delivery/Models/Authmodel.dart';
+import 'package:delivery/Views/SuperStokies/Myorder.dart';
 import 'package:delivery/Views/SuperStokies/SSOrder.dart';
 import 'package:flutter/material.dart';
 
 import 'CartPage.dart';
+import 'SSHome.dart';
 
 // import 'Orders/SSManageOrders.dart';
 
@@ -114,13 +116,13 @@ class SSNavigator extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigator.pop(context);
-                    // Navigator.push(
-                    //   newContext!,
-                    //   MaterialPageRoute(
-                    //     builder: (BuildContext context) => ManageProduct(),
-                    //   ),
-                    // );
+                    Navigator.pop(context);
+                    Navigator.push(
+                      newContext,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => SSHome(),
+                      ),
+                    );
                   },
                   child: ListTile(
                     leading: Icon(
@@ -174,7 +176,7 @@ class SSNavigator extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => SSOrder(),
+                        builder: (BuildContext context) => MyOrder(),
                       ),
                     );
                   },

@@ -2,6 +2,7 @@ import 'package:delivery/Components/Color.dart';
 import 'package:delivery/Database/DatabaseHelper.dart';
 import 'package:delivery/Models/AllUrl.dart';
 import 'package:delivery/Models/ProductModel.dart';
+import 'package:delivery/Views/SuperStokies/Response.dart';
 import 'package:flutter/material.dart';
 
 import 'SSnavigator.dart';
@@ -14,6 +15,7 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  bool flag = true;
   refresh() {
     setState(() {
       getCartProduct();
@@ -92,16 +94,52 @@ class _CartPageState extends State<CartPage> {
                   child: ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        warning.withRed(20),
+                        success,
                       ),
                     ),
-                    onPressed: () {},
-                    child: Wrap(
-                      children: [
-                        Text("Proceed Order with "),
-                        Text("Total: $totalData/-"),
-                      ],
-                    ),
+                    onPressed: () async {
+                      if (flag) {
+                        List<Cart> data = await getCartProduct();
+                        if (data.length > 0) {
+                          setState(() {
+                            flag = false;
+                          });
+                        } else {
+                          return false;
+                        }
+
+                        bool check = await placeOrder(await getCartProduct());
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => Response(
+                              response: check,
+                            ),
+                          ),
+                        );
+                        if (check) {
+                          await DatabaseHelper.instance
+                              .truncateTable("tblcart");
+                        }
+                        setState(() {
+                          flag = true;
+                        });
+                      }
+                    },
+                    child: (flag)
+                        ? Wrap(
+                            children: [
+                              Text("Proceed Order with "),
+                              Text("Total: $totalData/-"),
+                            ],
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation(primary),
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -127,6 +165,7 @@ class _CartPageState extends State<CartPage> {
                             Column(
                               children: data.map((e) {
                                 return CartProduct(
+                                  productName: e.productName,
                                   image: e.productImage ?? "",
                                   qty: e.quantity.toString(),
                                   productPrice: e.yourPrice,
@@ -156,6 +195,7 @@ class _CartPageState extends State<CartPage> {
 }
 
 class CartProduct extends StatefulWidget {
+  final String productName;
   final String image;
   final String productPrice;
   final String qty;
@@ -165,6 +205,7 @@ class CartProduct extends StatefulWidget {
   final Function callback;
   CartProduct({
     Key key,
+    this.productName = "",
     this.image,
     this.productPrice,
     this.qty = "0",
@@ -190,7 +231,7 @@ class _CartProductState extends State<CartProduct> {
             imageurl + "product/" + widget.image,
           ).image,
         ),
-        title: Text("product name"),
+        title: Text(widget.productName),
         subtitle: Text(
           "qty. ${widget.qty}, price: ${widget.productPrice}/- "
           "\n"
