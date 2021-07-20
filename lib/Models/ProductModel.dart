@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'AllUrl.dart';
 
 class Product {
+  int index;
   final int id;
   final String productName;
   final String hsnCode;
@@ -18,6 +19,7 @@ class Product {
   final String cmpyid;
   final List<Sku> sku;
   Product({
+    this.index,
     this.id,
     this.productName,
     this.hsnCode,
@@ -44,9 +46,12 @@ class Sku {
 Future<List<Product>> getProduct() async {
   List<Product> product = [];
   Dio dio = Dio();
-  dynamic response = await dio.get(api + "products/get");
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  String id = pref.getString('id');
+  dynamic response = await dio.get("${api}company/products/$id");
   if (response.statusCode == 200) {
     dynamic data = response.data;
+    int count = 1;
     for (dynamic res in data) {
       List<Sku> sku = [];
       for (dynamic s in res['category']) {
@@ -57,6 +62,7 @@ Future<List<Product>> getProduct() async {
         sku.add(sData);
       }
       Product prod = Product(
+        index: count,
         id: res['id'],
         productName: res['product_name'],
         hsnCode: res['product_hsncode'],
@@ -70,6 +76,7 @@ Future<List<Product>> getProduct() async {
         sku: sku,
       );
       product.add(prod);
+      count++;
     }
   }
   return product;
