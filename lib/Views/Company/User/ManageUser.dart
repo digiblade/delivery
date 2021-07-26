@@ -16,6 +16,8 @@ class ManageUsers extends StatefulWidget {
 }
 
 class _ManageUsersState extends State<ManageUsers> {
+  int val = 1;
+  int index = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,30 +30,62 @@ class _ManageUsersState extends State<ManageUsers> {
           newContext: context,
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => AddUsers(),
-            ),
-          );
-        },
-        backgroundColor: primary,
-        child: Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (BuildContext context) => AddUsers(),
+      //       ),
+      //     );
+      //   },
+      //   backgroundColor: primary,
+      //   child: Icon(Icons.add),
+      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Users",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Users",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  DropdownButton(
+                    value: val,
+                    onChanged: (value) {
+                      setState(() {
+                        val = value;
+                      });
+                    },
+                    items: [
+                      DropdownMenuItem(
+                        value: 1,
+                        child: Text("Company"),
+                      ),
+                      DropdownMenuItem(
+                        value: 2,
+                        child: Text("Stokist"),
+                      ),
+                      DropdownMenuItem(
+                        value: 3,
+                        child: Text("Destributor"),
+                      ),
+                      DropdownMenuItem(
+                        value: 4,
+                        child: Text("Sales Manager"),
+                      )
+                    ],
+                  ),
+                ],
               ),
               Center(
                 child: SingleChildScrollView(
@@ -59,6 +93,7 @@ class _ManageUsersState extends State<ManageUsers> {
                   child: FutureBuilder(
                     future: getUserData(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      index = 0;
                       if (snapshot.hasData) {
                         List<User> data = snapshot.data;
                         return DataTable(
@@ -118,17 +153,18 @@ class _ManageUsersState extends State<ManageUsers> {
                                 child: Text('Opration'),
                               ),
                             ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text('Action'),
-                              ),
-                            ),
+                            // DataColumn(
+                            //   label: Expanded(
+                            //     child: Text('Action'),
+                            //   ),
+                            // ),
                           ],
-                          rows: data.map((e) {
+                          rows: data.where((e) => (e.usertype == val)).map((e) {
+                            index++;
                             return DataRow(
                               cells: [
                                 DataCell(
-                                  Text("1"),
+                                  Text("$index"),
                                 ),
                                 DataCell(
                                   Text(
@@ -186,13 +222,13 @@ class _ManageUsersState extends State<ManageUsers> {
                                     children: [
                                       IconButton(
                                         icon: Icon(
-                                          (e.usertype == 5)
+                                          (e.usertype == 4)
                                               ? Icons.location_on
                                               : Icons.location_off,
                                           color: danger,
                                         ),
                                         onPressed: () {
-                                          (e.usertype == 5)
+                                          (e.usertype == 4)
                                               ? checkLocation(e.useremail)
                                               : Fluttertoast.showToast(
                                                   msg:
@@ -202,34 +238,34 @@ class _ManageUsersState extends State<ManageUsers> {
                                     ],
                                   ),
                                 ),
-                                DataCell(
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.edit,
-                                          color: success,
-                                        ),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  EditUsers(),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.delete,
-                                          color: danger,
-                                        ),
-                                        onPressed: () {},
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                // DataCell(
+                                //   Row(
+                                //     children: [
+                                //       IconButton(
+                                //         icon: Icon(
+                                //           Icons.edit,
+                                //           color: success,
+                                //         ),
+                                //         onPressed: () {
+                                //           Navigator.push(
+                                //             context,
+                                //             MaterialPageRoute(
+                                //               builder: (BuildContext context) =>
+                                //                   EditUsers(),
+                                //             ),
+                                //           );
+                                //         },
+                                //       ),
+                                //       IconButton(
+                                //         icon: Icon(
+                                //           Icons.delete,
+                                //           color: danger,
+                                //         ),
+                                //         onPressed: () {},
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
                               ],
                             );
                           }).toList(),

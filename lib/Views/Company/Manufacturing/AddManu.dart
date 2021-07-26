@@ -2,27 +2,31 @@ import 'dart:io';
 
 import 'package:delivery/Components/Button.dart';
 import 'package:delivery/Components/Color.dart';
+import 'package:delivery/Components/CustomDropdown.dart';
 import 'package:delivery/Components/InputField.dart';
 import 'package:delivery/Models/AllUrl.dart';
+import 'package:delivery/Models/ProductModel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:path/path.dart';
+// import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddProduct extends StatefulWidget {
+class AddManu extends StatefulWidget {
   final Function() callBack;
-  AddProduct({
+  final int pid;
+  AddManu({
     Key key,
     this.callBack,
+    this.pid,
   }) : super(key: key);
 
   @override
-  _AddProductState createState() => _AddProductState();
+  _AddManuState createState() => _AddManuState();
 }
 
-class _AddProductState extends State<AddProduct> {
+class _AddManuState extends State<AddManu> {
   File selected;
   bool selectedFlag = false;
   double progress = 0;
@@ -48,19 +52,17 @@ class _AddProductState extends State<AddProduct> {
         selectedFlag = true;
       });
 
-      String uploadurl = "${api}company/product";
+      String uploadurl = "${api}company/manufacturing/add";
       print(uploadurl);
       FormData formdata = FormData.fromMap({
-        "pImage": await MultipartFile.fromFile(selected.path,
-            filename: basename(selected.path)),
-        "pName": nameCtrl.text,
-        "hsncode": hsnCtrl.text,
+        "sku": sku,
+        "mcode": codeCtrl.text,
         "baseprice": priceCtrl.text,
         "sprice": sspriceCtrl.text,
         "dprice": dpriceCtrl.text,
         "rprice": retCtrl.text,
-        "description": desCtrl.text,
-        "id": userid,
+        "count": totalCtrl.text,
+        "pid": widget.pid,
       });
       Dio dio = Dio();
       Response responseProfile = await dio.post(
@@ -82,7 +84,7 @@ class _AddProductState extends State<AddProduct> {
         dynamic data = responseProfile.data;
         print(data);
         if (data['response'] == true) {
-          Fluttertoast.showToast(msg: "Product created successfully");
+          Fluttertoast.showToast(msg: "Manufacturing created successfully");
         } else {
           Fluttertoast.showToast(msg: "something went wrong");
         }
@@ -93,17 +95,36 @@ class _AddProductState extends State<AddProduct> {
         Fluttertoast.showToast(msg: "something went wrong");
       }
     } catch (e) {
-      print(e);
+      print(e.response);
     }
   }
 
-  final TextEditingController nameCtrl = TextEditingController();
-  final TextEditingController hsnCtrl = TextEditingController();
+  int sku;
+  final TextEditingController codeCtrl = TextEditingController();
   final TextEditingController priceCtrl = TextEditingController();
   final TextEditingController sspriceCtrl = TextEditingController();
   final TextEditingController dpriceCtrl = TextEditingController();
   final TextEditingController retCtrl = TextEditingController();
-  final TextEditingController desCtrl = TextEditingController();
+  final TextEditingController totalCtrl = TextEditingController();
+  Map<String, int> data = {};
+  @override
+  void initState() {
+    super.initState();
+    getSku();
+  }
+
+  getSku() async {
+    List<SKU> dim = await getSKU();
+
+    setState(() {
+      dim.forEach((element) {
+        data[element.skuname] = element.skuid;
+      });
+      if (dim.length > 0) {
+        sku = dim[0].skuid;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,23 +151,35 @@ class _AddProductState extends State<AddProduct> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InputField(
-                  onChange: (val) {},
-                  hint: "Product Name",
-                  controller: nameCtrl,
-                  borderColor: secondary,
-                  fillColor: secondary.withOpacity(0.5),
-                  hintColor: Colors.black.withOpacity(0.6),
+              if (data.length > 0)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: secondary,
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: primary,
+                      ),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: CustomDropdown(
+                        onChange: (val) {
+                          setState(() {
+                            sku = val;
+                          });
+                        },
+                        items: data,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: InputField(
-                  hint: "HSN Code",
+                  hint: "Code",
                   onChange: (val) {},
-                  controller: hsnCtrl,
+                  controller: codeCtrl,
                   borderColor: secondary,
                   fillColor: secondary.withOpacity(0.5),
                   hintColor: Colors.black.withOpacity(0.6),
@@ -199,9 +232,9 @@ class _AddProductState extends State<AddProduct> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: InputField(
-                  hint: "Description",
+                  hint: "Total Production",
                   onChange: (val) {},
-                  controller: desCtrl,
+                  controller: totalCtrl,
                   borderColor: secondary,
                   fillColor: secondary.withOpacity(0.5),
                   hintColor: Colors.black.withOpacity(0.6),
@@ -227,7 +260,7 @@ class _AddProductState extends State<AddProduct> {
                   },
                   color: primary,
                   height: 42,
-                  text: "Add Product $progress",
+                  text: "Add Manufacturing $progress",
                   textColor: light,
                 ),
               )

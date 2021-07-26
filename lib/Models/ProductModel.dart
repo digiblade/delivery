@@ -82,6 +82,99 @@ Future<List<Product>> getProduct() async {
   return product;
 }
 
+class SKU {
+  final int index;
+  final int skuid;
+  final String skuname;
+  final String skuimage;
+  SKU({
+    this.index,
+    this.skuid,
+    this.skuname,
+    this.skuimage,
+  });
+}
+
+Future<List<SKU>> getSKU() async {
+  List<SKU> product = [];
+  Dio dio = Dio();
+
+  dynamic response = await dio.get("${api}company/category");
+  if (response.statusCode == 200) {
+    dynamic data = response.data;
+    int count = 1;
+    for (dynamic res in data) {
+      SKU sData = SKU(
+        index: count++,
+        skuid: res['id'],
+        skuimage: res['category_image'],
+        skuname: res['category_name'],
+      );
+
+      product.add(sData);
+    }
+  }
+
+  return product;
+}
+
+class Manufacturing {
+  final int index;
+  final int id;
+  final String code;
+  final String bprice;
+  final String ssprice;
+  final String dprice;
+  final String rprice;
+  final String total;
+  final String sold;
+  final String skuname;
+  final String productname;
+  Manufacturing({
+    this.rprice,
+    this.total,
+    this.sold,
+    this.index,
+    this.id,
+    this.code,
+    this.bprice,
+    this.ssprice,
+    this.dprice,
+    this.skuname,
+    this.productname,
+  });
+}
+
+Future<List<Manufacturing>> getManu(id) async {
+  List<Manufacturing> product = [];
+  Dio dio = Dio();
+
+  dynamic response = await dio.get("${api}company/manufacturing/$id");
+  if (response.statusCode == 200) {
+    dynamic data = response.data;
+    int count = 1;
+    for (dynamic res in data['manufacturing']) {
+      Manufacturing sData = Manufacturing(
+        index: count++,
+        id: int.parse(res['manufacturing_id']),
+        code: res['manufacturing_code'],
+        bprice: res['manufacturing_baseprice'],
+        dprice: res['manufacturing_distibutorprice'],
+        ssprice: res['manufacturing_stokistprice'],
+        rprice: res['manufacturing_retailerprice'],
+        total: res['manufacturing_totalcount'],
+        sold: res['manufacturing_sold'],
+        skuname: res['sku']['category_name'],
+        productname: res['product']['product_name'],
+      );
+
+      product.add(sData);
+    }
+  }
+
+  return product;
+}
+
 class Cart {
   final int productId;
   final String productName;
@@ -297,4 +390,93 @@ Future<List<Order>> getOrder() async {
     print(e);
   }
   return ord;
+}
+
+class TotalOrder {
+  final orderid;
+  final productid;
+  final sku;
+  final skuid;
+  final productname;
+  final productimage;
+  final quantity;
+  final usertype;
+  final offer;
+  final bprice;
+  final ssprice;
+  final dprice;
+  final rprice;
+  final name;
+  final email;
+  final mobile;
+  final address;
+  final godown;
+  final group;
+  final status;
+  TotalOrder({
+    this.orderid,
+    this.productid,
+    this.sku,
+    this.skuid,
+    this.productname,
+    this.productimage,
+    this.quantity,
+    this.usertype,
+    this.offer,
+    this.bprice,
+    this.ssprice,
+    this.dprice,
+    this.rprice,
+    this.name,
+    this.email,
+    this.mobile,
+    this.address,
+    this.godown,
+    this.group,
+    this.status,
+  });
+}
+
+Future<List<TotalOrder>> getAllOrder() async {
+  Dio dio = Dio();
+  List<TotalOrder> odata = [];
+  Response response = await dio.post("${api}company/order");
+  if (response.statusCode == 200) {
+    dynamic data = response.data;
+    for (dynamic res in data) {
+      TotalOrder o = TotalOrder(
+        orderid: "#ORD00" + res['order_id'].toString(),
+        productid: res['order_productid'],
+        sku: (res['sku'] != null) ? res['sku']['category_name'] : "",
+        skuid: res['order_skuid'],
+        productname:
+            (res['product'] != null) ? res['product']['product_name'] : "",
+        productimage:
+            (res['product'] != null) ? res['product']['product_image'] : "",
+        quantity: res['order_quantity'],
+        usertype: res['order_usertype'],
+        offer: res['order_userprice'],
+        bprice:
+            (res['product'] != null) ? res['product']['product_baseprice'] : "",
+        ssprice: (res['product'] != null)
+            ? res['product']['product_stokistprice']
+            : "",
+        rprice: (res['product'] != null)
+            ? res['product']['product_distributorprice']
+            : "",
+        dprice: (res['product'] != null)
+            ? res['product']['product_retailerprice']
+            : "",
+        name: (res['user'] != null) ? res['user']['user_name'] : "",
+        email: (res['user'] != null) ? res['user']['user_email'] : "",
+        mobile: (res['user'] != null) ? res['user']['user_mobile'] : "",
+        address: (res['user'] != null) ? res['user']['user_officeaddress'] : "",
+        godown: (res['user'] != null) ? res['user']['user_godownaddress'] : "",
+        group: res['order_groupid'],
+        status: res['status'],
+      );
+      odata.add(o);
+    }
+  }
+  return odata;
 }

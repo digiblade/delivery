@@ -4,25 +4,28 @@ import 'package:delivery/Components/Button.dart';
 import 'package:delivery/Components/Color.dart';
 import 'package:delivery/Components/InputField.dart';
 import 'package:delivery/Models/AllUrl.dart';
+import 'package:delivery/Models/ProductModel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart';
-import 'package:image_picker/image_picker.dart';
 
-class AddProduct extends StatefulWidget {
+class EditManu extends StatefulWidget {
   final Function() callBack;
-  AddProduct({
+  final Product data;
+  EditManu({
     Key key,
+    this.data,
     this.callBack,
   }) : super(key: key);
 
   @override
-  _AddProductState createState() => _AddProductState();
+  _EditManuState createState() => _EditManuState();
 }
 
-class _AddProductState extends State<AddProduct> {
+class _EditManuState extends State<EditManu> {
   File selected;
   bool selectedFlag = false;
   double progress = 0;
@@ -47,21 +50,36 @@ class _AddProductState extends State<AddProduct> {
       setState(() {
         selectedFlag = true;
       });
-
-      String uploadurl = "${api}company/product";
+      int id = widget.data.id;
+      String uploadurl = "${api}company/product/edit";
       print(uploadurl);
-      FormData formdata = FormData.fromMap({
-        "pImage": await MultipartFile.fromFile(selected.path,
-            filename: basename(selected.path)),
-        "pName": nameCtrl.text,
-        "hsncode": hsnCtrl.text,
-        "baseprice": priceCtrl.text,
-        "sprice": sspriceCtrl.text,
-        "dprice": dpriceCtrl.text,
-        "rprice": retCtrl.text,
-        "description": desCtrl.text,
-        "id": userid,
-      });
+      FormData formdata;
+      if (selected != null) {
+        formdata = FormData.fromMap({
+          "pImage": await MultipartFile.fromFile(selected.path,
+              filename: basename(selected.path)),
+          "pName": nameCtrl.text,
+          "hsncode": hsnCtrl.text,
+          "baseprice": priceCtrl.text,
+          "sprice": sspriceCtrl.text,
+          "dprice": dpriceCtrl.text,
+          "rprice": retCtrl.text,
+          "description": desCtrl.text,
+          "id": id,
+        });
+      } else {
+        formdata = FormData.fromMap({
+          "pName": nameCtrl.text,
+          "hsncode": hsnCtrl.text,
+          "baseprice": priceCtrl.text,
+          "sprice": sspriceCtrl.text,
+          "dprice": dpriceCtrl.text,
+          "rprice": retCtrl.text,
+          "description": desCtrl.text,
+          "id": id,
+        });
+      }
+
       Dio dio = Dio();
       Response responseProfile = await dio.post(
         uploadurl,
@@ -80,7 +98,6 @@ class _AddProductState extends State<AddProduct> {
           selectedFlag = false;
         });
         dynamic data = responseProfile.data;
-        print(data);
         if (data['response'] == true) {
           Fluttertoast.showToast(msg: "Product created successfully");
         } else {
@@ -93,7 +110,7 @@ class _AddProductState extends State<AddProduct> {
         Fluttertoast.showToast(msg: "something went wrong");
       }
     } catch (e) {
-      print(e);
+      print(e.response);
     }
   }
 
@@ -104,6 +121,17 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController dpriceCtrl = TextEditingController();
   final TextEditingController retCtrl = TextEditingController();
   final TextEditingController desCtrl = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    nameCtrl.text = widget.data.productName;
+    hsnCtrl.text = widget.data.hsnCode;
+    priceCtrl.text = widget.data.basePrice;
+    sspriceCtrl.text = widget.data.stokistPrice;
+    dpriceCtrl.text = widget.data.distributorPrice;
+    retCtrl.text = widget.data.retailerPrice;
+    desCtrl.text = widget.data.description;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +152,7 @@ class _AddProductState extends State<AddProduct> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Add Product",
+                  "Edit Product",
                   style: TextStyle(
                     fontSize: 32,
                   ),
@@ -227,7 +255,7 @@ class _AddProductState extends State<AddProduct> {
                   },
                   color: primary,
                   height: 42,
-                  text: "Add Product $progress",
+                  text: "Edit Product $progress",
                   textColor: light,
                 ),
               )

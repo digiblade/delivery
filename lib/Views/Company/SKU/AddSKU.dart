@@ -11,18 +11,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddProduct extends StatefulWidget {
+class AddSKU extends StatefulWidget {
   final Function() callBack;
-  AddProduct({
+  AddSKU({
     Key key,
     this.callBack,
   }) : super(key: key);
 
   @override
-  _AddProductState createState() => _AddProductState();
+  _AddSKUState createState() => _AddSKUState();
 }
 
-class _AddProductState extends State<AddProduct> {
+class _AddSKUState extends State<AddSKU> {
   File selected;
   bool selectedFlag = false;
   double progress = 0;
@@ -48,19 +48,19 @@ class _AddProductState extends State<AddProduct> {
         selectedFlag = true;
       });
 
-      String uploadurl = "${api}company/product";
+      String uploadurl = "${api}company/category/add";
       print(uploadurl);
       FormData formdata = FormData.fromMap({
-        "pImage": await MultipartFile.fromFile(selected.path,
+        "cImage": await MultipartFile.fromFile(selected.path,
             filename: basename(selected.path)),
-        "pName": nameCtrl.text,
-        "hsncode": hsnCtrl.text,
-        "baseprice": priceCtrl.text,
-        "sprice": sspriceCtrl.text,
-        "dprice": dpriceCtrl.text,
-        "rprice": retCtrl.text,
-        "description": desCtrl.text,
-        "id": userid,
+        "cName": nameCtrl.text,
+        // "hsncode": hsnCtrl.text,
+        // "baseprice": priceCtrl.text,
+        // "sprice": sspriceCtrl.text,
+        // "dprice": dpriceCtrl.text,
+        // "rprice": retCtrl.text,
+        // "description": desCtrl.text,
+        // "id": userid,
       });
       Dio dio = Dio();
       Response responseProfile = await dio.post(
@@ -82,7 +82,7 @@ class _AddProductState extends State<AddProduct> {
         dynamic data = responseProfile.data;
         print(data);
         if (data['response'] == true) {
-          Fluttertoast.showToast(msg: "Product created successfully");
+          Fluttertoast.showToast(msg: "SKU created successfully");
         } else {
           Fluttertoast.showToast(msg: "something went wrong");
         }
@@ -98,12 +98,6 @@ class _AddProductState extends State<AddProduct> {
   }
 
   final TextEditingController nameCtrl = TextEditingController();
-  final TextEditingController hsnCtrl = TextEditingController();
-  final TextEditingController priceCtrl = TextEditingController();
-  final TextEditingController sspriceCtrl = TextEditingController();
-  final TextEditingController dpriceCtrl = TextEditingController();
-  final TextEditingController retCtrl = TextEditingController();
-  final TextEditingController desCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +108,7 @@ class _AddProductState extends State<AddProduct> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Products"),
+          title: Text("SKU"),
           backgroundColor: secondary,
         ),
         body: SingleChildScrollView(
@@ -124,7 +118,7 @@ class _AddProductState extends State<AddProduct> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Add Product",
+                  "Add SKU",
                   style: TextStyle(
                     fontSize: 32,
                   ),
@@ -134,74 +128,8 @@ class _AddProductState extends State<AddProduct> {
                 padding: const EdgeInsets.all(8.0),
                 child: InputField(
                   onChange: (val) {},
-                  hint: "Product Name",
+                  hint: "Sku Name",
                   controller: nameCtrl,
-                  borderColor: secondary,
-                  fillColor: secondary.withOpacity(0.5),
-                  hintColor: Colors.black.withOpacity(0.6),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InputField(
-                  hint: "HSN Code",
-                  onChange: (val) {},
-                  controller: hsnCtrl,
-                  borderColor: secondary,
-                  fillColor: secondary.withOpacity(0.5),
-                  hintColor: Colors.black.withOpacity(0.6),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InputField(
-                  hint: "Base Price",
-                  onChange: (val) {},
-                  controller: priceCtrl,
-                  borderColor: secondary,
-                  fillColor: secondary.withOpacity(0.5),
-                  hintColor: Colors.black.withOpacity(0.6),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InputField(
-                  hint: "Stokist Price",
-                  onChange: (val) {},
-                  controller: sspriceCtrl,
-                  borderColor: secondary,
-                  fillColor: secondary.withOpacity(0.5),
-                  hintColor: Colors.black.withOpacity(0.6),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InputField(
-                  hint: "Dis. price",
-                  onChange: (val) {},
-                  controller: dpriceCtrl,
-                  borderColor: secondary,
-                  fillColor: secondary.withOpacity(0.5),
-                  hintColor: Colors.black.withOpacity(0.6),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InputField(
-                  hint: "Ret. price",
-                  onChange: (val) {},
-                  controller: retCtrl,
-                  borderColor: secondary,
-                  fillColor: secondary.withOpacity(0.5),
-                  hintColor: Colors.black.withOpacity(0.6),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InputField(
-                  hint: "Description",
-                  onChange: (val) {},
-                  controller: desCtrl,
                   borderColor: secondary,
                   fillColor: secondary.withOpacity(0.5),
                   hintColor: Colors.black.withOpacity(0.6),
@@ -227,7 +155,7 @@ class _AddProductState extends State<AddProduct> {
                   },
                   color: primary,
                   height: 42,
-                  text: "Add Product $progress",
+                  text: "Add SKU $progress",
                   textColor: light,
                 ),
               )

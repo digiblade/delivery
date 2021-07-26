@@ -1,23 +1,27 @@
 import 'package:delivery/Components/Color.dart';
 import 'package:delivery/Models/AllUrl.dart';
 import 'package:delivery/Models/ProductModel.dart';
-import 'package:delivery/Views/Company/Manufacturing/ManageManu.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../NavigationDrawer.dart';
-import 'AddProduct.dart';
-import 'EditProduct.dart';
+import 'AddManu.dart';
+import 'EditManu.dart';
 
-class ManageProduct extends StatefulWidget {
-  ManageProduct({Key key}) : super(key: key);
+class ManageManu extends StatefulWidget {
+  final int pid;
+
+  ManageManu({
+    Key key,
+    this.pid,
+  }) : super(key: key);
 
   @override
-  _ManageProductState createState() => _ManageProductState();
+  _ManageManuState createState() => _ManageManuState();
 }
 
-class _ManageProductState extends State<ManageProduct> {
+class _ManageManuState extends State<ManageManu> {
   callBack() {
     setState(() {});
   }
@@ -37,7 +41,7 @@ class _ManageProductState extends State<ManageProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Products"),
+        title: Text("Manufacturing"),
         backgroundColor: secondary,
       ),
       endDrawer: Drawer(
@@ -50,8 +54,9 @@ class _ManageProductState extends State<ManageProduct> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => AddProduct(
+              builder: (BuildContext context) => AddManu(
                 callBack: callBack,
+                pid: widget.pid,
               ),
             ),
           );
@@ -66,7 +71,7 @@ class _ManageProductState extends State<ManageProduct> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Products",
+                "Manufacturing",
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -76,13 +81,13 @@ class _ManageProductState extends State<ManageProduct> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: FutureBuilder(
-                    future: getProduct(),
+                    future: getManu(widget.pid),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data.length == 0) {
                           return Center(child: Text("No Product Found"));
                         }
-                        List<Product> data = snapshot.data;
+                        List<Manufacturing> data = snapshot.data;
                         return DataTable(
                           columns: [
                             DataColumn(
@@ -92,17 +97,17 @@ class _ManageProductState extends State<ManageProduct> {
                             ),
                             DataColumn(
                               label: Expanded(
-                                child: Text("Image"),
+                                child: Text("Product name"),
                               ),
                             ),
                             DataColumn(
                               label: Expanded(
-                                child: Text("Product Name"),
+                                child: Text("Code"),
                               ),
                             ),
                             DataColumn(
                               label: Expanded(
-                                child: Text("HSN Code"),
+                                child: Text("Sku"),
                               ),
                             ),
                             DataColumn(
@@ -127,9 +132,19 @@ class _ManageProductState extends State<ManageProduct> {
                             ),
                             DataColumn(
                               label: Expanded(
-                                child: Text("Action"),
+                                child: Text("Total"),
                               ),
                             ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text("Remaining"),
+                              ),
+                            ),
+                            // DataColumn(
+                            //   label: Expanded(
+                            //     child: Text("Action"),
+                            //   ),
+                            // ),
                           ],
                           rows: data.map((e) {
                             return DataRow(
@@ -138,89 +153,69 @@ class _ManageProductState extends State<ManageProduct> {
                                   Text("${e.index}"),
                                 ),
                                 DataCell(
-                                  Image.network(
-                                    "$imageurl/product/${e.image}",
-                                    height: 64,
-                                    width: 64,
+                                  Text("${e.productname}"),
+                                ),
+                                DataCell(
+                                  Text("${e.code}"),
+                                ),
+                                DataCell(
+                                  Text("${e.skuname}"),
+                                ),
+                                DataCell(
+                                  Text("${e.bprice}"),
+                                ),
+                                DataCell(
+                                  Text(
+                                    "${e.ssprice}",
                                   ),
                                 ),
                                 DataCell(
-                                  Text("${e.productName}"),
+                                  Text("${e.dprice}"),
                                 ),
                                 DataCell(
-                                  Text("${e.hsnCode}"),
+                                  Text("${e.rprice}"),
                                 ),
                                 DataCell(
-                                  Text("${e.basePrice}"),
+                                  Text("${e.total}"),
                                 ),
                                 DataCell(
-                                  Text("${e.stokistPrice}"),
-                                ),
-                                DataCell(
-                                  Container(
-                                    width: 128,
-                                    child: Text(
-                                      "${e.distributorPrice}",
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Text("${e.retailerPrice}"),
+                                  Text(
+                                      "${int.parse(e.total) - int.parse(e.sold)}"),
                                 ),
                                 // DataCell(
-                                //   Text("${e.index}"),
+                                //   Row(
+                                //     mainAxisSize: MainAxisSize.min,
+                                //     children: [
+                                //       IconButton(
+                                //         icon: Icon(
+                                //           Icons.edit,
+                                //           color: success,
+                                //         ),
+                                //         onPressed: () {
+                                //           Navigator.push(
+                                //             context,
+                                //             MaterialPageRoute(
+                                //               builder: (BuildContext context) =>
+                                //                   EditManu(
+                                //                 // data: e,
+                                //                 callBack: callBack,
+                                //               ),
+                                //             ),
+                                //           );
+                                //         },
+                                //       ),
+                                //       IconButton(
+                                //         icon: Icon(
+                                //           Icons.delete,
+                                //           color: danger,
+                                //         ),
+                                //         onPressed: () {
+                                //           delete(e.id);
+                                //         },
+                                //       ),
+                                //     ],
+                                //   ),
                                 // ),
-                                DataCell(
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.edit,
-                                          color: success,
-                                        ),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  EditProduct(
-                                                data: e,
-                                                callBack: callBack,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.book,
-                                          color: warning,
-                                        ),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  ManageManu(
-                                                pid: e.id,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.delete,
-                                          color: danger,
-                                        ),
-                                        onPressed: () {
-                                          delete(e.id);
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ],
                             );
                           }).toList(),

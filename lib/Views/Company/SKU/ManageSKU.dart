@@ -1,23 +1,22 @@
 import 'package:delivery/Components/Color.dart';
 import 'package:delivery/Models/AllUrl.dart';
 import 'package:delivery/Models/ProductModel.dart';
-import 'package:delivery/Views/Company/Manufacturing/ManageManu.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../NavigationDrawer.dart';
-import 'AddProduct.dart';
-import 'EditProduct.dart';
+import 'AddSKU.dart';
+import 'EditSKU.dart';
 
-class ManageProduct extends StatefulWidget {
-  ManageProduct({Key key}) : super(key: key);
+class ManageSKU extends StatefulWidget {
+  ManageSKU({Key key}) : super(key: key);
 
   @override
-  _ManageProductState createState() => _ManageProductState();
+  _ManageSKUState createState() => _ManageSKUState();
 }
 
-class _ManageProductState extends State<ManageProduct> {
+class _ManageSKUState extends State<ManageSKU> {
   callBack() {
     setState(() {});
   }
@@ -25,8 +24,8 @@ class _ManageProductState extends State<ManageProduct> {
   delete(int id) async {
     try {
       Dio dio = Dio();
-      await dio.get(api + "company/deleteproduct/$id");
-      Fluttertoast.showToast(msg: "Product delete successfully");
+      await dio.get(api + "company/deletecategory/$id");
+      Fluttertoast.showToast(msg: "Sku delete successfully");
       setState(() {});
     } catch (e) {
       Fluttertoast.showToast(msg: "Something went wrong");
@@ -37,7 +36,7 @@ class _ManageProductState extends State<ManageProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Products"),
+        title: Text("Manufacturing"),
         backgroundColor: secondary,
       ),
       endDrawer: Drawer(
@@ -50,7 +49,7 @@ class _ManageProductState extends State<ManageProduct> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => AddProduct(
+              builder: (BuildContext context) => AddSKU(
                 callBack: callBack,
               ),
             ),
@@ -66,7 +65,7 @@ class _ManageProductState extends State<ManageProduct> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Products",
+                "SKU",
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -76,13 +75,13 @@ class _ManageProductState extends State<ManageProduct> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: FutureBuilder(
-                    future: getProduct(),
+                    future: getSKU(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data.length == 0) {
                           return Center(child: Text("No Product Found"));
                         }
-                        List<Product> data = snapshot.data;
+                        List<SKU> data = snapshot.data;
                         return DataTable(
                           columns: [
                             DataColumn(
@@ -92,37 +91,12 @@ class _ManageProductState extends State<ManageProduct> {
                             ),
                             DataColumn(
                               label: Expanded(
-                                child: Text("Image"),
+                                child: Text("SKU Image"),
                               ),
                             ),
                             DataColumn(
                               label: Expanded(
-                                child: Text("Product Name"),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text("HSN Code"),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text("Price"),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text("SS price"),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text("Dis. price"),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text("Retailer price"),
+                                child: Text("SKU"),
                               ),
                             ),
                             DataColumn(
@@ -139,33 +113,13 @@ class _ManageProductState extends State<ManageProduct> {
                                 ),
                                 DataCell(
                                   Image.network(
-                                    "$imageurl/product/${e.image}",
+                                    "$imageurl/categories/${e.skuimage}",
                                     height: 64,
                                     width: 64,
                                   ),
                                 ),
                                 DataCell(
-                                  Text("${e.productName}"),
-                                ),
-                                DataCell(
-                                  Text("${e.hsnCode}"),
-                                ),
-                                DataCell(
-                                  Text("${e.basePrice}"),
-                                ),
-                                DataCell(
-                                  Text("${e.stokistPrice}"),
-                                ),
-                                DataCell(
-                                  Container(
-                                    width: 128,
-                                    child: Text(
-                                      "${e.distributorPrice}",
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Text("${e.retailerPrice}"),
+                                  Text("${e.skuname}"),
                                 ),
                                 // DataCell(
                                 //   Text("${e.index}"),
@@ -184,26 +138,9 @@ class _ManageProductState extends State<ManageProduct> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (BuildContext context) =>
-                                                  EditProduct(
+                                                  EditSKU(
                                                 data: e,
                                                 callBack: callBack,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.book,
-                                          color: warning,
-                                        ),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  ManageManu(
-                                                pid: e.id,
                                               ),
                                             ),
                                           );
@@ -215,7 +152,7 @@ class _ManageProductState extends State<ManageProduct> {
                                           color: danger,
                                         ),
                                         onPressed: () {
-                                          delete(e.id);
+                                          delete(e.skuid);
                                         },
                                       ),
                                     ],

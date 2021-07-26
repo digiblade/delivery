@@ -1,7 +1,9 @@
 import 'package:delivery/Views/Company/Product/ManageProduct.dart';
+import 'package:delivery/Views/Company/SKU/ManageSKU.dart';
 import 'package:flutter/material.dart';
 
 // import '../../main.dart';
+import 'Manufacturing/ManageManu.dart';
 import 'Order/ManageOrder.dart';
 import 'User/ManageUser.dart';
 import '../../Models/Authmodel.dart';
@@ -127,20 +129,31 @@ class NavigatorDrawer extends StatelessWidget {
                 Divider(
                   color: Colors.black,
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.supervised_user_circle,
-                    size: 32,
-                  ),
-                  title: Text(
-                    "Manage Stocks",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      newContext,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ManageSKU(),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.supervised_user_circle,
+                      size: 32,
                     ),
-                  ),
-                  subtitle: Text(
-                    "Manage Product Stocks",
+                    title: Text(
+                      "Manage SKU",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                    subtitle: Text(
+                      "Manage Product SKU",
+                    ),
                   ),
                 ),
                 Divider(
