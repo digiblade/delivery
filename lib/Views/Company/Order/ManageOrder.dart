@@ -1,7 +1,10 @@
 import 'package:delivery/Components/Color.dart';
 import 'package:delivery/Components/InputField.dart';
+import 'package:delivery/Models/AllUrl.dart';
 import 'package:delivery/Models/ProductModel.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../NavigationDrawer.dart';
 
@@ -15,6 +18,7 @@ class ManageOrders extends StatefulWidget {
 class _ManageOrdersState extends State<ManageOrders> {
   final TextEditingController ctrl = TextEditingController();
   bool flag = false;
+  String status = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +71,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                                   child: Text("No Order Found"),
                                 );
                               }
+
                               return DataTable(
                                   columns: [
                                     DataColumn(
@@ -195,7 +200,96 @@ class _ManageOrdersState extends State<ManageOrders> {
                                           Text("${e.offer}"),
                                         ),
                                         DataCell(
-                                          Text("${e.status}"),
+                                          DropdownButton(
+                                            onChanged: (val) async {
+                                              try {
+                                                if (val == e.status) {
+                                                  return;
+                                                }
+                                                _openLoadingDialog(context);
+                                                Dio dio = Dio();
+                                                SharedPreferences pref =
+                                                    await SharedPreferences
+                                                        .getInstance();
+                                                String userid =
+                                                    pref.getString("userid");
+                                                String id =
+                                                    pref.getString("id");
+                                                FormData form =
+                                                    FormData.fromMap({
+                                                  "cid": int.parse(id),
+                                                  "pid": e.productid,
+                                                  "sid": e.skuid,
+                                                  // "oid": e.orderid,
+                                                  "uid": "$userid",
+                                                  "qty": e.quantity,
+                                                  "price": (val == "CONFIRM")
+                                                      ? e.bprice
+                                                      : (e.offer != "NA")
+                                                          ? e.offer
+                                                          : 0,
+                                                  "id": e.oid,
+                                                  "status": val,
+                                                });
+                                                Response response =
+                                                    await dio.post(
+                                                  api + "stock/changeStatus",
+                                                  data: form,
+                                                );
+                                                if (response.statusCode ==
+                                                    200) {
+                                                  dynamic data = response.data;
+                                                  print(data);
+                                                }
+                                                setState(() {});
+                                                Navigator.pop(context);
+                                              } catch (e) {
+                                                print(e.response);
+                                              }
+                                            },
+                                            value: e.status,
+                                            items: [
+                                              if (e.status == "PENDING")
+                                                DropdownMenuItem(
+                                                  value:
+                                                      "pending".toUpperCase(),
+                                                  child: Text(
+                                                    "pending".toUpperCase(),
+                                                  ),
+                                                ),
+                                              if (e.status ==
+                                                      "Accept request"
+                                                          .toUpperCase() ||
+                                                  e.status == "PENDING")
+                                                DropdownMenuItem(
+                                                  value: "Accept request"
+                                                      .toUpperCase(),
+                                                  child: Text(
+                                                    "Accept request"
+                                                        .toUpperCase(),
+                                                  ),
+                                                ),
+                                              if (e.status ==
+                                                      "Confirm".toUpperCase() ||
+                                                  e.status == "PENDING")
+                                                DropdownMenuItem(
+                                                  value:
+                                                      "Confirm".toUpperCase(),
+                                                  child: Text(
+                                                    "Confirm".toUpperCase(),
+                                                  ),
+                                                ),
+                                              if (e.status != "PENDING")
+                                                DropdownMenuItem(
+                                                  value:
+                                                      "Delivered".toUpperCase(),
+                                                  child: Text(
+                                                    "Delivered".toUpperCase(),
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                          // Text("${e.status}"),
                                         ),
                                         // DataCell(
                                         //   IconButton(
@@ -261,6 +355,27 @@ class _ManageOrdersState extends State<ManageOrders> {
             ),
         ],
       ),
+    );
+  }
+
+  void _openLoadingDialog(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return Center(
+          child: SizedBox(
+            height: 64,
+            width: 64,
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(primary),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

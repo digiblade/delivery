@@ -1,25 +1,26 @@
 import 'package:delivery/Models/Authmodel.dart';
-import 'package:delivery/Views/SuperStokies/Myorder.dart';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CartPage.dart';
-import 'SSHome.dart';
+import 'DHome.dart';
+import 'Myorder.dart';
 
 // import 'Orders/SSManageOrders.dart';
 
-class SSNavigator extends StatefulWidget {
+class DNavigator extends StatefulWidget {
   final BuildContext newContext;
-  const SSNavigator({
+  const DNavigator({
     Key key,
     this.newContext,
   }) : super(key: key);
 
   @override
-  _SSNavigatorState createState() => _SSNavigatorState();
+  _DNavigatorState createState() => _DNavigatorState();
 }
 
-class _SSNavigatorState extends State<SSNavigator> {
+class _DNavigatorState extends State<DNavigator> {
   String email = "";
   @override
   void initState() {
@@ -83,7 +84,7 @@ class _SSNavigatorState extends State<SSNavigator> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Super stokist",
+                                  "Distributor",
                                   style: TextStyle(
                                     color: Colors.white.withOpacity(0.8),
                                     fontSize: 20,
@@ -138,7 +139,7 @@ class _SSNavigatorState extends State<SSNavigator> {
                     Navigator.push(
                       widget.newContext,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => SSHome(),
+                        builder: (BuildContext context) => DHome(),
                       ),
                     );
                   },
@@ -166,7 +167,7 @@ class _SSNavigatorState extends State<SSNavigator> {
                     Navigator.push(
                       widget.newContext,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => CartPage(),
+                        builder: (BuildContext context) => DCartPage(),
                       ),
                     );
                   },
@@ -194,7 +195,7 @@ class _SSNavigatorState extends State<SSNavigator> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => MyOrder(),
+                        builder: (BuildContext context) => DMyOrder(),
                       ),
                     );
                   },

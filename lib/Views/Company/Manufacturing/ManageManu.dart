@@ -7,7 +7,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../NavigationDrawer.dart';
 import 'AddManu.dart';
-import 'EditManu.dart';
 
 class ManageManu extends StatefulWidget {
   final int pid;

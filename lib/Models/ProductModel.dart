@@ -50,6 +50,7 @@ Future<List<Product>> getProduct() async {
   String id = pref.getString('id');
   dynamic response = await dio.get("${api}company/products/$id");
   if (response.statusCode == 200) {
+    print(response);
     dynamic data = response.data;
     int count = 1;
     for (dynamic res in data) {
@@ -78,6 +79,57 @@ Future<List<Product>> getProduct() async {
       product.add(prod);
       count++;
     }
+  }
+  return product;
+}
+
+Future<List<Product>> getProductById() async {
+  List<Product> product = [];
+  try {
+    Dio dio = Dio();
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String id = pref.getString('id');
+    print(id);
+    FormData form = FormData.fromMap({
+      "id": id,
+    });
+    dynamic response = await dio.post(
+      "${api}getStock",
+      data: form,
+    );
+    if (response.statusCode == 200) {
+      dynamic data = response.data;
+
+      int count = 1;
+      for (dynamic res in data) {
+        List<Sku> sku = [];
+
+        Sku sData = Sku(
+          skuid: res['sku']['id'],
+          name: res['sku']['category_name'],
+        );
+        sku.add(sData);
+
+        Product prod = Product(
+          index: count,
+          id: res['product']['id'],
+          productName: res['product']['product_name'],
+          hsnCode: res['product']['product_hsncode'],
+          basePrice: res['product']['product_baseprice'],
+          stokistPrice: res['product']['product_stokistprice'],
+          distributorPrice: res['product']['product_distributorprice'],
+          retailerPrice: res['product']['product_retailerprice'],
+          description: res['product']['product_description'],
+          image: res['product']['product_image'],
+          cmpyid: res['product']['product_companyid'],
+          sku: sku,
+        );
+        product.add(prod);
+        count++;
+      }
+    }
+  } catch (e) {
+    print(e);
   }
   return product;
 }
@@ -392,8 +444,87 @@ Future<List<Order>> getOrder() async {
   return ord;
 }
 
+Future<List<Order>> getOrderSM() async {
+  List<Order> ord = [];
+  try {
+    Dio dio = Dio();
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String userid = pref.getString("userid");
+
+    FormData form = FormData.fromMap(
+      {
+        "userid": userid,
+      },
+    );
+    dynamic response = await dio.post(
+      api + "order/view",
+      data: form,
+    );
+
+    if (response.statusCode == 200) {
+      dynamic data = response.data;
+      int ind = 1;
+      for (dynamic i in data.reversed) {
+        Order o = Order(
+          sNo: ind++,
+          product: i['product']['product_name'],
+          sku: i['sku']['category_name'],
+          date: i['created_at'],
+          hsn: i['product']['product_hsncode'],
+          price: i['product']['product_retailerprice'],
+          yourprice: i['order_userprice'],
+        );
+        ord.add(o);
+      }
+    }
+  } catch (e) {
+    print(e);
+  }
+  return ord;
+}
+
+Future<List<Order>> getOrderD() async {
+  List<Order> ord = [];
+  try {
+    Dio dio = Dio();
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String userid = pref.getString("userid");
+
+    FormData form = FormData.fromMap(
+      {
+        "userid": userid,
+      },
+    );
+    dynamic response = await dio.post(
+      api + "order/view",
+      data: form,
+    );
+
+    if (response.statusCode == 200) {
+      dynamic data = response.data;
+      int ind = 1;
+      for (dynamic i in data.reversed) {
+        Order o = Order(
+          sNo: ind++,
+          product: i['product']['product_name'],
+          sku: i['sku']['category_name'],
+          date: i['created_at'],
+          hsn: i['product']['product_hsncode'],
+          price: i['product']['product_distributorprice'],
+          yourprice: i['order_userprice'],
+        );
+        ord.add(o);
+      }
+    }
+  } catch (e) {
+    print(e);
+  }
+  return ord;
+}
+
 class TotalOrder {
   final orderid;
+  final oid;
   final productid;
   final sku;
   final skuid;
@@ -414,6 +545,7 @@ class TotalOrder {
   final group;
   final status;
   TotalOrder({
+    this.oid,
     this.orderid,
     this.productid,
     this.sku,
@@ -440,11 +572,21 @@ class TotalOrder {
 Future<List<TotalOrder>> getAllOrder() async {
   Dio dio = Dio();
   List<TotalOrder> odata = [];
-  Response response = await dio.post("${api}company/order");
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  String id = pref.getString("id");
+
+  Response response = await dio.post(
+    "${api}company/order",
+  );
   if (response.statusCode == 200) {
     dynamic data = response.data;
     for (dynamic res in data) {
+      // print("${res['user']['user_parentid']} : $id");
+      if (res['user']['user_parentid'] != id) {
+        continue;
+      }
       TotalOrder o = TotalOrder(
+        oid: res['order_id'],
         orderid: "#ORD00" + res['order_id'].toString(),
         productid: res['order_productid'],
         sku: (res['sku'] != null) ? res['sku']['category_name'] : "",

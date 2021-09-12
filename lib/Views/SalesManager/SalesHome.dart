@@ -1,12 +1,16 @@
 import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/Components/Color.dart';
+import 'package:delivery/Models/AllUrl.dart';
+import 'package:delivery/Models/ProductModel.dart';
+import 'package:delivery/Views/SalesManager/SMnavigator.dart';
 // import 'package:delivery/main.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Models/Authmodel.dart';
-import 'SMPurchase.dart';
+// import 'SMPurchase.dart';
+import 'SSPurchase.dart';
 
 class SMHome extends StatefulWidget {
   SMHome({Key key}) : super(key: key);
@@ -57,11 +61,8 @@ class _SMHomeState extends State<SMHome> {
   trackLocation() {
     location.onLocationChanged.listen((LocationData currentLocation) {
       print("change");
-      setState(() {
-        latitude = currentLocation.latitude;
-        longitude = currentLocation.longitude;
-      });
-      updateLocation(latitude, longitude);
+
+      updateLocation(currentLocation.latitude, currentLocation.longitude);
     });
   }
 
@@ -84,18 +85,12 @@ class _SMHomeState extends State<SMHome> {
           backgroundColor: primary,
           title: Text("Sales Manager"),
         ),
-        endDrawer: Drawer(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            logout();
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/logout',
-              (route) => false,
-            );
-          },
-          child: Icon(Icons.logout),
+        endDrawer: Drawer(
+          child: SMNavigator(
+            newContext: context,
+          ),
         ),
+        // r
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           // crossAxisAlignment: CrossAxisAlignment.center,
@@ -130,21 +125,61 @@ class _SMHomeState extends State<SMHome> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                  shrinkWrap: true,
-                  primary: false,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    OpenContainer(
-                      closedBuilder: (context, action) => ProductCard(),
-                      openBuilder: (context, action) => SMpurchase(),
+                    Text(
+                      "Products",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
                     ),
-                    ProductCard(),
-                    ProductCard(),
-                    ProductCard(),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    // ProductGrid(
+                    //   onTap: navigate,
+                    // )
+                    Container(
+                      child: FutureBuilder(
+                        future: getProductById(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            List<Product> data = snapshot.data;
+                            return GridView.count(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 8,
+                              mainAxisSpacing: 8,
+                              shrinkWrap: true,
+                              primary: false,
+                              children: data.where((e) => e.sku.length > 0).map(
+                                (e) {
+                                  return OpenContainer(
+                                    closedBuilder: (context, action) =>
+                                        ProductCard(
+                                      image: e.image,
+                                      price: e.retailerPrice,
+                                      name: e.productName,
+                                      description: e.description,
+                                    ),
+                                    openBuilder: (context, action) =>
+                                        SMPurchase(
+                                      prod: e,
+                                    ),
+                                  );
+                                },
+                              ).toList(),
+                            );
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -157,74 +192,79 @@ class _SMHomeState extends State<SMHome> {
 }
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({Key key}) : super(key: key);
+  final String image;
+  final String price;
+  final String name;
+  final String description;
+  const ProductCard({
+    Key key,
+    this.image = "",
+    this.price = "",
+    this.name = "",
+    this.description = "",
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: Image.network(
-              "https://digiblade.in/popposapi/images/biryani.jpeg",
-            ).image,
-            fit: BoxFit.cover,
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: Image.network(
+            imageurl + "product/" + image,
+          ).image,
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                // width: double.infinity,
+                color: primary,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 8,
+                  ),
+                  child: Text(
+                    (price != null) ? price + " /-" : "",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: light,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
           ),
-        ),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  // width: double.infinity,
-                  color: primary,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 12,
-                    ),
-                    child: Text(
-                      "160/-",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: light,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              // width: double.infinity,/
+              color: light,
+              child: ListTile(
+                title: Text(
+                  name ?? "",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
+                ),
+                subtitle: Text(
+                  description ?? "",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  // width: double.infinity,
-                  color: light.withOpacity(0.8),
-                  child: ListTile(
-                    title: Text(
-                      "Prodctname",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    subtitle: Text(
-                      "Prodctname",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

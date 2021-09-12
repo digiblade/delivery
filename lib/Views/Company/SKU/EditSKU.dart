@@ -50,7 +50,7 @@ class _EditSKUState extends State<EditSKU> {
       setState(() {
         selectedFlag = true;
       });
-      int id = widget.data.skuid;
+      // int id = widget.data.skuid;
       String uploadurl = "${api}company/category/edit";
       print(uploadurl);
       FormData formdata;

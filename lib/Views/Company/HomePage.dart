@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                     ProductCard(
                       onPressed: () {},
                       bgColor: Colors.deepOrange,
-                      name: "Destributor: $dis",
+                      name: "Distributor: $dis",
                     ),
                     ProductCard(
                       onPressed: () {},

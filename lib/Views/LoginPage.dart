@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'Company/HomePage.dart';
+import 'Destributor/DHome.dart';
 import 'Register.dart';
 import 'SuperStokies/SSHome.dart';
 // import 'main.dart';
@@ -151,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                                   case 2:
                                     return SSHome();
                                   case 3:
-                                    return SSHome();
+                                    return DHome();
                                   case 4:
                                     return SMHome();
                                   default:
@@ -226,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
               case 2:
                 return SSHome();
               case 3:
-                return SSHome();
+                return DHome();
               case 4:
                 return SMHome();
               default:

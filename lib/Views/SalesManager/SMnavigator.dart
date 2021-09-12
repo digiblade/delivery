@@ -1,25 +1,26 @@
 import 'package:delivery/Models/Authmodel.dart';
-import 'package:delivery/Views/SuperStokies/Myorder.dart';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'CartPage.dart';
-import 'SSHome.dart';
+import 'SMCartPage.dart';
+import 'SMHome.dart';
+import 'SMMyorder.dart';
 
 // import 'Orders/SSManageOrders.dart';
 
-class SSNavigator extends StatefulWidget {
+class SMNavigator extends StatefulWidget {
   final BuildContext newContext;
-  const SSNavigator({
+  const SMNavigator({
     Key key,
     this.newContext,
   }) : super(key: key);
 
   @override
-  _SSNavigatorState createState() => _SSNavigatorState();
+  _SMNavigatorState createState() => _SMNavigatorState();
 }
 
-class _SSNavigatorState extends State<SSNavigator> {
+class _SMNavigatorState extends State<SMNavigator> {
   String email = "";
   @override
   void initState() {
@@ -55,7 +56,6 @@ class _SSNavigatorState extends State<SSNavigator> {
                     ),
                   ),
                   child: Container(
-                    height: 200,
                     child: DrawerHeader(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +83,7 @@ class _SSNavigatorState extends State<SSNavigator> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Super stokist",
+                                  "Sales Manager",
                                   style: TextStyle(
                                     color: Colors.white.withOpacity(0.8),
                                     fontSize: 20,
@@ -138,7 +138,7 @@ class _SSNavigatorState extends State<SSNavigator> {
                     Navigator.push(
                       widget.newContext,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => SSHome(),
+                        builder: (BuildContext context) => SMHome(),
                       ),
                     );
                   },
@@ -166,7 +166,7 @@ class _SSNavigatorState extends State<SSNavigator> {
                     Navigator.push(
                       widget.newContext,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => CartPage(),
+                        builder: (BuildContext context) => SMCartPage(),
                       ),
                     );
                   },
@@ -194,7 +194,7 @@ class _SSNavigatorState extends State<SSNavigator> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => MyOrder(),
+                        builder: (BuildContext context) => SMMyOrder(),
                       ),
                     );
                   },
@@ -267,34 +267,34 @@ class _SSNavigatorState extends State<SSNavigator> {
                 Divider(
                   color: Colors.black,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    // Navigator.push(
-                    //   newContext!,
-                    //   MaterialPageRoute(
-                    //     builder: (BuildContext context) => ManageOrders(),
-                    //   ),
-                    // );
-                  },
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.supervised_user_circle,
-                      size: 32,
-                    ),
-                    title: Text(
-                      "Manage Distributors Orders",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    ),
-                    subtitle: Text("Manage All Orders"),
-                  ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     // Navigator.push(
+                //     //   newContext!,
+                //     //   MaterialPageRoute(
+                //     //     builder: (BuildContext context) => ManageOrders(),
+                //     //   ),
+                //     // );
+                //   },
+                //   child: ListTile(
+                //     leading: Icon(
+                //       Icons.supervised_user_circle,
+                //       size: 32,
+                //     ),
+                //     title: Text(
+                //       "Manage Orders",
+                //       style: TextStyle(
+                //         color: Colors.black,
+                //         fontSize: 20,
+                //       ),
+                //     ),
+                //     subtitle: Text("Manage All Orders"),
+                //   ),
+                // ),
+                // Divider(
+                //   color: Colors.black,
+                // ),
               ],
             ),
           ),

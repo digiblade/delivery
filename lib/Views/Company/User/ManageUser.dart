@@ -5,8 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../../Models/UserModel.dart';
 import '../NavigationDrawer.dart';
 import '../locationmap.dart';
-import 'AddUser.dart';
-import 'EditUser.dart';
 
 class ManageUsers extends StatefulWidget {
   ManageUsers({Key key}) : super(key: key);
@@ -77,7 +75,7 @@ class _ManageUsersState extends State<ManageUsers> {
                       ),
                       DropdownMenuItem(
                         value: 3,
-                        child: Text("Destributor"),
+                        child: Text("Distributor"),
                       ),
                       DropdownMenuItem(
                         value: 4,
